@@ -17,6 +17,7 @@ package-lock.json
 yarn.lock
 
 internal_docs
+api
 
 # Editor directories and files
 .vscode/*
