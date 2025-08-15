@@ -21,27 +21,29 @@ const jsConfig = [
     name: "js/config",
     ...js.configs.recommended,
   },
-  // Stylistic Plugin
   plugins.stylistic,
-  // Import X Plugin
   plugins.importX,
-  // Airbnb Base Recommended Config
   ...configs.base.recommended,
-  // Strict Import Config
   rules.base.importsStrict,
 ];
 
 const reactConfig = [
-  // React Plugin
   plugins.react,
-  // React Hooks Plugin
   plugins.reactHooks,
-  // React JSX A11y Plugin
   plugins.reactA11y,
-  // Airbnb React Recommended Config
   ...configs.react.recommended,
-  // Strict React Config
   rules.react.strict,
+  {
+    rules: {
+      "react/function-component-definition": [
+        "error",
+        {
+          namedComponents: ["function-declaration", "arrow-function"],
+          unnamedComponents: "arrow-function",
+        },
+      ],
+    },
+  },
 ];
 
 const typescriptConfig = [
@@ -74,14 +76,9 @@ const prettierConfig = [
 ];
 
 export default [
-  // Ignore .gitignore files/folder in eslint
   includeIgnoreFile(gitignorePath),
-  // Javascript Config
   ...jsConfig,
-  // React Config
   ...reactConfig,
-  // TypeScript Config
   ...typescriptConfig,
-  // Prettier Config
   ...prettierConfig,
 ];
