@@ -2,6 +2,7 @@
   "name": "epam-async-race",
   "private": true,
   "version": "0.0.0",
+  "author": "Valerii Sofian <valerii.sofyan@gmail.com>",
   "type": "module",
   "scripts": {
     "dev": "vite",
