@@ -5,11 +5,7 @@ import { BrowserRouter } from "react-router";
 import routes from "./routes";
 
 function App(): React.ReactNode {
-  return (
-    <BrowserRouter>
-      <div id="App">{routes()}</div>
-    </BrowserRouter>
-  );
+  return <BrowserRouter>{routes()}</BrowserRouter>;
 }
 
 export default App;
