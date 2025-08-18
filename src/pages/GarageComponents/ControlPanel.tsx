@@ -1,6 +1,14 @@
 import React from "react";
 
+import { useSelector } from "react-redux";
+
+import type { RootState } from "../../store/store";
+
 export default function ControlPanel(): React.ReactNode {
+  const carsAmount: number = useSelector(
+    (state: RootState) => state.garage.length,
+  );
+
   // TODO: Add color picker
   return (
     <section
@@ -25,7 +33,7 @@ export default function ControlPanel(): React.ReactNode {
           <span>Update selected car</span>
         </button>
       </div>
-      <h3 className={"text-xl"}>Cars total: 98</h3>
+      <h3 className={"text-xl"}>Cars total: {carsAmount}</h3>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import CarIcon from "./CarIcon";
+import GarageService from "../../services/GarageService";
 import "../garageStyles.scss";
 
 import type { ICar } from "../../types/ApiTypes";
@@ -13,6 +14,7 @@ export default function CarTrack(props: ICar | null): React.ReactNode {
   }
   const { name, id, color } = props;
 
+  // TODO: Handle race states before sending deletion requests
   return (
     <section
       id={"carTrack"}
@@ -34,7 +36,11 @@ export default function CarTrack(props: ICar | null): React.ReactNode {
           <button id="select" type={"button"}>
             <span>SELECT</span>
           </button>
-          <button id="delete" type={"button"}>
+          <button
+            id="delete"
+            onClick={() => GarageService.deleteCar(id)}
+            type={"button"}
+          >
             <span>DELETE</span>
           </button>
           <button id="start" type={"button"}>

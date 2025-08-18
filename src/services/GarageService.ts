@@ -35,6 +35,25 @@ export default class GarageService {
     return carAdded;
   }
 
+  static deleteCar(id: number): boolean {
+    // TODO: When the winners endpoints logic ready, remove the car from the leaderboard too
+    if (id < 0) return false;
+
+    fetchHelper<object>({
+      url: makeApiUrl(`/garage/${id}`),
+      method: "DELETE",
+      isJsonBody: false,
+    }).catch((error: string) => {
+      if (JSON.parse(error).status === 404) {
+        return false;
+      }
+      throw new Error(error);
+    });
+
+    store.dispatch(GarageSlice.actions.removeItem(id));
+    return true;
+  }
+
   static generateCars(carsNumber: number): void {
     for (let i = 0; i < carsNumber; i += 1) {
       this.addCar(randomItem(carModels) ?? "", randomItem(hexColors) ?? "");
