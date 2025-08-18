@@ -30,8 +30,11 @@ export default function sliceFactory<T extends IndexedObject>(
 
         // since object is null => id is free
         if (additionId && additionId.object === null) {
-          state.splice(additionId.index, 0, action.payload as Draft<T>);
-          return state as T[];
+          return [
+            ...state.slice(0, additionId.index),
+            action.payload as Draft<T>,
+            ...state.slice(additionId.index),
+          ] as T[];
         }
 
         // requested id is already busy, (obj as T) was returned
@@ -50,8 +53,11 @@ export default function sliceFactory<T extends IndexedObject>(
           return state as T[];
         }
 
-        state.splice(objectToUpdate.index, 1, action.payload as Draft<T>);
-        return state as T[];
+        return [
+          ...state.slice(0, objectToUpdate.index),
+          action.payload as Draft<T>,
+          ...state.slice(objectToUpdate.index + 1),
+        ] as T[];
       },
 
       removeItem(state: Draft<T[]>, action: PayloadAction<number>): T[] {
@@ -62,7 +68,10 @@ export default function sliceFactory<T extends IndexedObject>(
           return state as T[];
         }
 
-        return state.splice(objectToRemove.index, 1) as T[];
+        return [
+          ...state.slice(0, objectToRemove.index),
+          ...state.slice(objectToRemove.index + 1),
+        ] as T[];
       },
     },
   });
