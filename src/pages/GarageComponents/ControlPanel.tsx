@@ -1,13 +1,31 @@
 import React from "react";
 
-import CarIcon from "./CarIcon";
-
 export default function ControlPanel(): React.ReactNode {
+  // TODO: Add color picker
   return (
-    <div id="GarageControlPanel">
-      Create cars, Edit cars, Race start/end, The number of all cars in the
-      garage.
-      <CarIcon color={"#fa0"} />
-    </div>
+    <section
+      className={"my-15 pb-15 border-b flex justify-around flex-wrap"}
+      id="GarageControlPanel"
+    >
+      <div
+        className={"flex justify-center items-center flex-wrap gap-10"}
+        id="controlPanel"
+      >
+        <input
+          className={"border-b-1"}
+          id={"carNameInput"}
+          placeholder={"Enter car name..."}
+          type="text"
+        />
+        <p id={"colorPickerPlaceholder"}>CP</p>
+        <button id="addCar" type={"button"}>
+          <span>Add new car</span>
+        </button>
+        <button id="updateCar" type={"button"}>
+          <span>Update selected car</span>
+        </button>
+      </div>
+      <h3 className={"text-xl"}>Cars total: 98</h3>
+    </section>
   );
 }

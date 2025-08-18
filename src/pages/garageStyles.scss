@@ -1,0 +1,76 @@
+button {
+  display: flex;
+  flex-grow: 2;
+  border: 1px solid #22c55e;
+  border-radius: 9999px;
+  padding: 2px 5px;
+
+  span {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+  }
+
+  &:is(:hover, :active) {
+    color: #fff;
+    background-color: #22c55e;
+  }
+}
+
+#delete,
+#stop {
+  border-color: #ef4444;
+
+  &:is(:hover, :active) {
+    background-color: #ef4444;
+  }
+}
+
+#raceReset, #updateCar {
+  border-color: #F97316;
+
+  &:is(:hover, :active) {
+    background-color: #F97316;
+  }
+}
+
+#generateCars {
+  border-color: #3B82F6;
+
+  &:is(:hover, :active) {
+    background-color: #3B82F6;
+  }
+}
+
+#prevPage,
+#nextPage, #addCar, #updateCar {
+  flex-grow: 0;
+  padding: 2px 10px;
+}
+
+#track {
+  position: relative;
+
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    width: 2px;
+    height: 70px;
+    background-color: #000;
+  }
+
+  &::before {
+    left: 100px;
+  }
+
+  &::after {
+    right: 100px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  button {
+    flex-grow: 0;
+  }
+}

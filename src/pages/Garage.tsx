@@ -8,7 +8,7 @@ export default function Garage(): React.ReactNode {
   return (
     <div id="Garage">
       <Header />
-      <main>
+      <main className={"mb-10"}>
         <ControlPanel />
         <CarRace />
       </main>
