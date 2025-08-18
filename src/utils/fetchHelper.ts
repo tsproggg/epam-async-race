@@ -3,10 +3,14 @@ import type { IFetch } from "../types/FetchTypes";
 // Params should already be added to the given url in the correct order
 export default async function fetchHelper<ResponseT>(
   req: IFetch,
-  abortSignal: AbortSignal,
+  abortSignal?: AbortSignal,
 ): Promise<ResponseT> {
   if (req.url.length === 0) {
     throw new Error("Missing URL parameter");
+  }
+
+  if (req.isJsonBody && !req.body) {
+    throw new Error("Missing JSON body");
   }
 
   const urlObj = new URL(req.url);
