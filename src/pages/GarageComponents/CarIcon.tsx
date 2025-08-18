@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 
+import { hexColorRegex } from "../../types/GlobalConst";
+
 export default function CarIcon(props: { color: string }): React.ReactNode {
   const [fillColor, setFillColor] = useState<string>("#000");
   const { color } = props;
 
   useEffect(() => {
-    // To keep things simple, only hex-colors are allowed
-    const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-
+    // TODO: Mention in readme: To keep things simple, only hex-colors are allowed
     if (hexColorRegex.test(color)) {
       setFillColor(color);
     } else {
