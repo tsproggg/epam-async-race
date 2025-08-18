@@ -3,8 +3,15 @@ import React, { useState } from "react";
 import CarIcon from "./CarIcon";
 import "../garageStyles.scss";
 
-export default function CarTrack(): React.ReactNode {
+import type { ICar } from "../../types/ApiTypes";
+
+export default function CarTrack(props: ICar | null): React.ReactNode {
   const [isSelected, setIsSelected] = useState<boolean>(false);
+
+  if (props === null) {
+    return null;
+  }
+  const { name, id, color } = props;
 
   return (
     <section
@@ -14,7 +21,10 @@ export default function CarTrack(): React.ReactNode {
       }
     >
       <div className={"w-auto sm:w-160 text-center"} id="controls">
-        <h4 className={"mb-5"}>BMW M5{isSelected ? " - Selected" : ""}</h4>
+        <h4 className={"mb-5"}>
+          {name}
+          {isSelected ? " - Selected" : ""}
+        </h4>
         <div
           id="buttons"
           className={
@@ -36,7 +46,7 @@ export default function CarTrack(): React.ReactNode {
         </div>
       </div>
       <div className={"flex-1 ml-5"} id="track">
-        <CarIcon color={"#fa0"} />
+        <CarIcon color={color} />
       </div>
     </section>
   );
