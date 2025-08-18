@@ -41,7 +41,11 @@ export default async function fetchHelper<ResponseT>(
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `HTTP ${response.status} - ${response.statusText}: ${errorText}`,
+      JSON.stringify({
+        status: response.status,
+        statusText: response.statusText,
+        message: errorText,
+      }),
     );
   } else {
     const contentType = response.headers.get("Content-Type") ?? "";
