@@ -8,8 +8,8 @@ const [GarageSlice] = sliceFactory<ICar>("GarageSlice", []);
 const [WinnersSlice] = sliceFactory<IWinner>("WinnersSlice", []);
 
 const rootReducer = combineReducers({
-  garage: GarageSlice,
-  winners: WinnersSlice,
+  garage: GarageSlice.reducer,
+  winners: WinnersSlice.reducer,
 });
 
 const store = configureStore({
