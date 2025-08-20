@@ -75,7 +75,11 @@ export default function CarRace(): React.ReactNode {
           <span>{"<="} PREVIOUS PAGE</span>
         </button>
         <p>
-          PAGE {page + 1} / {Math.ceil(carsList.length / 7)}
+          PAGE{" "}
+          {page + 1 <= Math.ceil(carsList.length / 7)
+            ? page + 1
+            : Math.ceil(carsList.length / 7)}{" "}
+          / {Math.ceil(carsList.length / 7)}
         </p>
         <button
           id="nextPage"
