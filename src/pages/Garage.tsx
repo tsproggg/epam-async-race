@@ -13,7 +13,7 @@ export default function Garage(): React.ReactNode {
   return (
     <React.Fragment>
       <Header />
-      <main className={"mb-10"}>
+      <main>
         <ControlPanel />
         <CarRace />
       </main>

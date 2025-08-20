@@ -1,24 +1,5 @@
-button {
-  display: flex;
-  flex-grow: 2;
-  border: 1px solid #22c55e;
-  border-radius: 9999px;
-  padding: 2px 5px;
-
-  span {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1;
-  }
-
-  &:is(:hover, :active) {
-    color: #fff;
-    background-color: #22c55e;
-  }
-}
-
 #delete,
-#stop {
+#stop, #closePopup {
   border-color: #ef4444;
 
   &:is(:hover, :active) {
@@ -66,11 +47,5 @@ button {
 
   &::after {
     right: 100px;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  button {
-    flex-grow: 0;
   }
 }
