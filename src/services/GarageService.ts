@@ -1,4 +1,5 @@
-import { makeApiUrl } from "../Links";
+import { Links, makeApiUrl } from "../Links";
+import { clearBuffer } from "../store/CarPropsInputBufferSlice";
 import store, { GarageSlice } from "../store/store";
 import { carModels, hexColorRegex, hexColors } from "../types/GlobalConst";
 import fetchHelper from "../utils/fetchHelper";
@@ -9,7 +10,7 @@ import type { ICar } from "../types/ApiTypes";
 export default class GarageService {
   static async getGarage(): Promise<ICar[]> {
     const cars: ICar[] = await fetchHelper<ICar[]>({
-      url: makeApiUrl("/garage"),
+      url: makeApiUrl(Links.ENDP_GARAGE),
       method: "GET",
       isJsonBody: false,
     });
@@ -25,7 +26,7 @@ export default class GarageService {
     }
 
     const carAdded = await fetchHelper<ICar>({
-      url: makeApiUrl("/garage"),
+      url: makeApiUrl(Links.ENDP_GARAGE),
       method: "POST",
       isJsonBody: true,
       body: { name, color },
@@ -35,12 +36,33 @@ export default class GarageService {
     return carAdded;
   }
 
+  static async updateCar(): Promise<ICar> {
+    const state = store.getState().carPropsInputBufferSlice;
+    if (!state?.name || state.id < 0 || !hexColorRegex.test(state.color)) {
+      throw new Error("No car props found or invalid arguments");
+    }
+
+    const updatedCar = await fetchHelper<ICar>({
+      url: makeApiUrl(Links.ENDP_GARAGE, state.id.toString()),
+      method: "PUT",
+      isJsonBody: true,
+      body: {
+        name: state.name,
+        color: state.color,
+      },
+    });
+
+    store.dispatch(GarageSlice.actions.updateItem(updatedCar));
+    store.dispatch(clearBuffer());
+    return updatedCar;
+  }
+
   static deleteCar(id: number): boolean {
     // TODO: When the winners endpoints logic ready, remove the car from the leaderboard too
     if (id < 0) return false;
 
     fetchHelper<object>({
-      url: makeApiUrl(`/garage/${id}`),
+      url: makeApiUrl(Links.ENDP_GARAGE, id.toString()),
       method: "DELETE",
       isJsonBody: false,
     }).catch((error: string) => {
@@ -52,6 +74,12 @@ export default class GarageService {
 
     store.dispatch(GarageSlice.actions.removeItem(id));
     return true;
+  }
+
+  static async addCarFromStore(): Promise<ICar> {
+    const state = store.getState().carPropsInputBufferSlice;
+    if (!state) throw new Error("No car props found");
+    return this.addCar(state.name, state.color);
   }
 
   static generateCars(carsNumber: number): void {
