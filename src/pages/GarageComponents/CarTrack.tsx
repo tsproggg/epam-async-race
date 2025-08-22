@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
 
 import CarIcon from "./CarIcon";
 import GarageService from "../../services/GarageService";
+import { setSelectedCarId } from "../../store/CarPropsInputBufferSlice";
 import "../garageStyles.scss";
 
+import type { RootState } from "../../store/store";
 import type { ICar } from "../../types/ApiTypes";
 
-export default function CarTrack(props: ICar | null): React.ReactNode {
+export default function CarTrack(props: ICar): React.ReactNode {
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const selectedCarId: number = useSelector(
+    (state: RootState) => state.carPropsInputBufferSlice.id,
+  );
+  const dispatch = useDispatch();
 
-  if (props === null) {
-    return null;
-  }
   const { name, id, color } = props;
+
+  useEffect(() => {
+    setIsSelected(selectedCarId === id);
+  }, [selectedCarId, id]);
 
   // TODO: Handle race states before sending deletion requests
   return (
@@ -33,7 +42,11 @@ export default function CarTrack(props: ICar | null): React.ReactNode {
             "flex justify-center sm:justify-around flex-wrap gap-10 sm:gap-5"
           }
         >
-          <button id="select" type={"button"}>
+          <button
+            id="select"
+            onClick={() => dispatch(setSelectedCarId(id))}
+            type={"button"}
+          >
             <span>SELECT</span>
           </button>
           <button
