@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
+import CarPropsInputBufferSlice from "./CarPropsInputBufferSlice";
 import sliceFactory from "./SliceFactory";
 
 import type { ICar, IWinner } from "../types/ApiTypes";
@@ -10,6 +11,7 @@ const [WinnersSlice] = sliceFactory<IWinner>("WinnersSlice", []);
 const rootReducer = combineReducers({
   garage: GarageSlice.reducer,
   winners: WinnersSlice.reducer,
+  carPropsInputBufferSlice: CarPropsInputBufferSlice.reducer,
 });
 
 const store = configureStore({
