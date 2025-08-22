@@ -16,6 +16,9 @@ const CarPropsInputBufferSlice = createSlice({
   name: "CarPropInputBufferSlice",
   initialState,
   reducers: {
+    clearBuffer(_: ICar, __: PayloadAction) {
+      return initialState;
+    },
     setSelectedCarId(state: ICar, action: PayloadAction<number>) {
       if (action.payload < 0) return state;
       return { ...state, id: action.payload };
@@ -36,5 +39,5 @@ const CarPropsInputBufferSlice = createSlice({
 });
 
 export default CarPropsInputBufferSlice;
-export const { setSelectedCarId, setName, setColor } =
+export const { clearBuffer, setSelectedCarId, setName, setColor } =
   CarPropsInputBufferSlice.actions;
