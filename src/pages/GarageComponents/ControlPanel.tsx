@@ -2,6 +2,8 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 
+import ColorPicker from "../../components/ColorPicker";
+
 import type { RootState } from "../../store/store";
 
 export default function ControlPanel(): React.ReactNode {
@@ -25,7 +27,7 @@ export default function ControlPanel(): React.ReactNode {
           placeholder={"Enter car name..."}
           type="text"
         />
-        <p id={"colorPickerPlaceholder"}>CP</p>
+        <ColorPicker />
         <button id="addCar" type={"button"}>
           <span>Add new car</span>
         </button>
