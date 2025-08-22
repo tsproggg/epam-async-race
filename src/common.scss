@@ -25,6 +25,11 @@ button {
   flex-grow: 0;
 }
 
+#openPopupComponent {
+  padding: 0;
+  border: none;
+}
+
 @media screen and (max-width: 640px) {
   button {
     flex-grow: 0;
