@@ -12,6 +12,9 @@ export default function ControlPanel(): React.ReactNode {
   const carsAmount: number = useSelector(
     (state: RootState) => state.garage.length,
   );
+  const carPropsName: string = useSelector(
+    (state: RootState) => state.carPropsInputBufferSlice.name,
+  );
   const dispatch = useDispatch();
 
   // TODO: Handle race states for car addition/update requests
@@ -31,6 +34,7 @@ export default function ControlPanel(): React.ReactNode {
           onChange={(e) => dispatch(setName(e.target.value))}
           placeholder={"Enter car name..."}
           type="text"
+          value={carPropsName}
         />
         <ColorPicker />
         <button
