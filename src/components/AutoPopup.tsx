@@ -4,15 +4,23 @@ export interface AutoPopupProps {
   popupName: string;
 
   // If center is true, it will override coords
-  position: { x: number; y: number; center: boolean };
-  popupChildren: React.ReactNode;
+
+  // NOTE: Since default values of props are defined in the function, I suppressed the warnings
+  // eslint-disable-next-line react/require-default-props
+  position?: { x: number; y: number; center: boolean };
+  // eslint-disable-next-line react/require-default-props
+  popupChildren?: React.ReactNode;
 }
 
 // A popup opening automatically on spawn
 export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
   const [isOpened, setIsOpened] = useState<boolean>(true);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const { popupName, popupChildren, position } = props;
+  const {
+    popupName,
+    popupChildren = null,
+    position = { x: 0, y: 0, center: true },
+  } = props;
 
   useEffect(() => {
     const dialog = dialogRef.current;
