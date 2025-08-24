@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { hexColorRegex } from "../../types/GlobalConst";
 
-export default function CarIcon(props: { color: string }): React.ReactNode {
+export default function CarIcon(props: {
+  color: string;
+  // eslint-disable-next-line react/require-default-props
+  size?: number;
+}): React.ReactNode {
   const [fillColor, setFillColor] = useState<string>("#000");
-  const { color } = props;
+  const { color, size = 100 } = props;
 
   useEffect(() => {
     // TODO: Mention in readme: To keep things simple, only hex-colors are allowed
@@ -15,11 +19,13 @@ export default function CarIcon(props: { color: string }): React.ReactNode {
     }
   }, [color]);
 
+  // TODO: add some background for colors close to white or light grey
   return (
     <svg
-      height="100px"
+      height={`${size}px`}
+      id={"car"}
       viewBox="0 0 32 32"
-      width="100px"
+      width={`${size}px`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <g fill={fillColor} transform="translate(32,0) scale(-1,1)">
