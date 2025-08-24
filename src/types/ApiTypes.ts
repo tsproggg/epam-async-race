@@ -10,4 +10,15 @@ export interface IWinner extends IndexedObject {
   time: number;
 }
 
-// TODO: Add types for /engine requests if needed
+export interface ICarRaceStats {
+  velocity: number;
+  distance: number;
+}
+
+export const EngineStatus = {
+  STARTED: "started",
+  STOPPED: "stopped",
+  DRIVE: "drive",
+} as const;
+
+export type EngineStatus = (typeof EngineStatus)[keyof typeof EngineStatus];
