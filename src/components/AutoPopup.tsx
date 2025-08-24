@@ -10,6 +10,8 @@ export interface AutoPopupProps {
   position?: { x: number; y: number; center: boolean };
   // eslint-disable-next-line react/require-default-props
   popupChildren?: React.ReactNode;
+  // eslint-disable-next-line react/require-default-props
+  onCloseHandler?: () => void;
 }
 
 // A popup opening automatically on spawn
@@ -20,6 +22,7 @@ export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
     popupName,
     popupChildren = null,
     position = { x: 0, y: 0, center: true },
+    onCloseHandler = () => {},
   } = props;
 
   useEffect(() => {
@@ -36,6 +39,7 @@ export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
   }, [isOpened]);
 
   if (!isOpened) {
+    onCloseHandler();
     return null;
   }
 
