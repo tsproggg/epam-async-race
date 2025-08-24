@@ -6,6 +6,8 @@ export const Links = {
 
   API_URL: "http://localhost:3000",
   ENDP_GARAGE: "/garage",
+  ENDP_ENGINE: "/engine",
+  ENDP_WINNERS: "/winners",
 } as const;
 
 export function makeApiUrl(...url: string[]): string {
