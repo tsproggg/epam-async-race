@@ -1,6 +1,5 @@
 import React from "react";
 
-import WinnersLabel from "./WinnersComponents/WinnersLabel";
 import WinnersTable from "./WinnersComponents/WinnersTable";
 import Header from "../components/Header";
 
@@ -9,7 +8,6 @@ export default function Winners(): React.ReactNode {
     <div id="Winners">
       <Header />
       <main>
-        <WinnersLabel />
         <WinnersTable />
       </main>
     </div>
