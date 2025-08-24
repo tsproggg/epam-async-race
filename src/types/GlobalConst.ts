@@ -1,3 +1,10 @@
+export interface IRaceStats {
+  isGlobalRace: boolean;
+  ongoing: boolean;
+  bestTime: number;
+  winnerId: number;
+}
+
 export const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 export const hexColors = [
