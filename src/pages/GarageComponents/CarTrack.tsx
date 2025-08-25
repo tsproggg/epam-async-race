@@ -17,6 +17,7 @@ import {
   setIsOngoing,
 } from "../../store/RaceStatsSlice";
 import "../garageStyles.scss";
+import createCarAnimation from "./createCarAnimation";
 
 import type { RootState } from "../../store/store";
 import type { ICar } from "../../types/ApiTypes";
@@ -47,27 +48,6 @@ export default function CarTrack(props: ICar): React.ReactNode {
   const dispatch = useDispatch();
 
   const { name, id, color } = props;
-  const animateCar = (duration: number): Animation | null => {
-    if (!carRef.current || !trackRef.current) return null;
-
-    carRef.current.style.position = "absolute";
-    return carRef.current.animate(
-      [
-        {
-          left: 0,
-        },
-        {
-          left: `${trackRef.current.offsetWidth - carRef.current.offsetWidth}px`,
-        },
-      ],
-      {
-        duration,
-        fill: "forwards",
-        easing: "ease-in-out",
-        iterations: 1,
-      },
-    );
-  };
 
   const selectCarHandler = () => {
     dispatch(setSelectedCarId(id));
@@ -76,54 +56,63 @@ export default function CarTrack(props: ICar): React.ReactNode {
   };
 
   const startCarHandler = async (): Promise<void> => {
-    try {
-      dispatch(setIsOngoing({ ongoing: true, isGlobalRace: false }));
-      abortControllerRef.current = new AbortController();
-      const startTimeMs = Date.now();
+    if (!carRef.current || !trackRef.current) return;
 
+    dispatch(setIsOngoing({ ongoing: true, isGlobalRace: false }));
+    abortControllerRef.current = new AbortController();
+    const startTimeMs = Date.now();
+    let success = false;
+
+    try {
       const animDuration = await EngineService.startEngine(
         id,
         abortControllerRef.current.signal,
       );
-      carAnimationRef.current = animateCar(animDuration);
 
-      const success = await EngineService.drive(
+      carAnimationRef.current = createCarAnimation(
+        carRef.current,
+        trackRef.current,
+        animDuration,
+      );
+
+      success = await EngineService.drive(
         id,
         abortControllerRef.current.signal,
       );
-      const raceTime = Date.now() - startTimeMs;
-
-      if (!success) {
-        carAnimationRef.current?.pause();
-        setNotificationMessage("Sorry, car broke down :(");
-      } else {
-        dispatch(
-          setBestTime({
-            ongoing: false,
-            isGlobalRace: false,
-            winnerId: id,
-            bestTime: raceTime,
-          }),
-        );
-
-        setNotificationMessage(
-          `The car reached finish point in ${raceTime / 1000} seconds`,
-        );
-      }
     } catch (e) {
       carAnimationRef.current?.pause();
 
       if (e instanceof Error && e.name === "AbortError") {
         setNotificationMessage("Race was stopped");
       } else {
-        setNotificationMessage("Sorry, car broke down :(");
+        setNotificationMessage("Sorry, the car broke down :(");
       }
-    } finally {
-      EngineService.stopEngine(id);
-      abortControllerRef.current = null;
-
-      dispatch(setIsOngoing({ ongoing: false, isGlobalRace: false }));
     }
+
+    const raceTime = Date.now() - startTimeMs;
+
+    if (!success) {
+      carAnimationRef.current?.pause();
+      setNotificationMessage("Sorry, the car broke down :(");
+    } else {
+      dispatch(
+        setBestTime({
+          ongoing: false,
+          isGlobalRace: false,
+          winnerId: id,
+          bestTime: raceTime,
+        }),
+      );
+
+      setNotificationMessage(
+        `The car reached finish point in ${raceTime / 1000} seconds`,
+      );
+    }
+
+    EngineService.stopEngine(id);
+    abortControllerRef.current = null;
+
+    dispatch(setIsOngoing({ ongoing: false, isGlobalRace: false }));
   };
 
   const stopCarHandler = useCallback(() => {
