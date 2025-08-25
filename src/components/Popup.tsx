@@ -22,7 +22,11 @@ export default function Popup(props: PopupProps): React.ReactNode {
         {openPopupComponent}
       </button>
 
-      {isOpened ? <AutoPopup {...props} /> : ""}
+      {isOpened ? (
+        <AutoPopup {...props} onCloseHandler={() => setIsOpened(false)} />
+      ) : (
+        ""
+      )}
     </div>
   );
 }

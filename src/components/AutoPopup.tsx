@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 export interface AutoPopupProps {
   popupName: string;
 
-  // If center is true, it will override coords
+  // In position, if center is true, it will override coords
 
   // NOTE: Since default values of props are defined in the function, I suppressed the warnings
   // eslint-disable-next-line react/require-default-props
@@ -66,11 +66,12 @@ export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
         <div className={"flex justify-around mb-10"} id="popupHeader">
           <h5 className={"font-bold text-xl"}>{popupName}</h5>
           <button
+            className={"ml-10 w-70"}
             id="closePopup"
             onClick={() => setIsOpened(false)}
             type="button"
           >
-            Close
+            <span>Close</span>
           </button>
         </div>
         <div className={"flex justify-center items-center"}>
