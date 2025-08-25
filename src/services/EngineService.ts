@@ -9,19 +9,29 @@ export default class EngineService {
   // it is only used for the correct work of animations.
   // The winner is decided by calculations based on
   // request pending time
-  static async startEngine(id: number): Promise<number> {
+  static async startEngine(
+    id: number,
+    abortSignal: AbortSignal,
+  ): Promise<number> {
     if (id < 0) throw new Error("Invalid car id");
 
     try {
-      const res: ICarRaceStats = await fetchHelper({
-        url: makeApiUrl(Links.ENDP_ENGINE),
-        method: "PATCH",
-        isJsonBody: false,
-        query: { id, status: EngineStatus.STARTED },
-      });
+      const res: ICarRaceStats = await fetchHelper(
+        {
+          url: makeApiUrl(Links.ENDP_ENGINE),
+          method: "PATCH",
+          isJsonBody: false,
+          query: { id, status: EngineStatus.STARTED },
+        },
+        abortSignal,
+      );
 
       return res.distance / res.velocity;
     } catch (e) {
+      if (e instanceof Error && e.name === "AbortError") {
+        throw e;
+      }
+
       throw new Error("Invalid car id");
     }
   }
@@ -39,16 +49,19 @@ export default class EngineService {
     });
   }
 
-  static async drive(id: number): Promise<boolean> {
+  static async drive(id: number, abortSignal: AbortSignal): Promise<boolean> {
     if (id < 0) throw new Error("Invalid car id");
 
     try {
-      const res: { success: boolean } = await fetchHelper({
-        url: makeApiUrl(Links.ENDP_ENGINE),
-        method: "PATCH",
-        isJsonBody: false,
-        query: { id, status: EngineStatus.DRIVE },
-      });
+      const res: { success: boolean } = await fetchHelper(
+        {
+          url: makeApiUrl(Links.ENDP_ENGINE),
+          method: "PATCH",
+          isJsonBody: false,
+          query: { id, status: EngineStatus.DRIVE },
+        },
+        abortSignal,
+      );
 
       return res.success;
     } catch (e) {
@@ -64,6 +77,10 @@ export default class EngineService {
         if (e.status === 500) {
           return false;
         }
+      }
+
+      if (e instanceof Error && e.name === "AbortError") {
+        throw e;
       }
     }
 
