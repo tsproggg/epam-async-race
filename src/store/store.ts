@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import CarPropsInputBufferSlice from "./CarPropsInputBufferSlice";
+import NotificationSlice from "./NotificationSlice";
 import RaceStatsSlice from "./RaceStatsSlice";
 import sliceFactory from "./SliceFactory";
 
@@ -14,6 +15,8 @@ const rootReducer = combineReducers({
   winners: WinnersSlice.reducer,
   carPropsInputBufferSlice: CarPropsInputBufferSlice.reducer,
   raceStatsSlice: RaceStatsSlice.reducer,
+
+  notificationSlice: NotificationSlice.reducer,
 });
 
 const store = configureStore({
