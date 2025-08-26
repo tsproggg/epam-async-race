@@ -18,9 +18,3 @@ export interface IFetch {
   headers?: Record<string, string>;
   query?: Record<string, string | number>;
 }
-
-export interface FetchResponse<T> {
-  data: T | null;
-  error: string | null;
-  loading: boolean;
-}
