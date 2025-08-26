@@ -19,7 +19,7 @@ export default function WinnerRow(props: WinnerRowProps): React.ReactNode {
       </td>
       <td>{name}</td>
       <td className={"max-w-100"}>{wins}</td>
-      <td className={"max-w-200"}>{time}</td>
+      <td className={"max-w-200"}>{(time / 1000).toFixed(3)} s</td>
     </tr>
   );
 }
