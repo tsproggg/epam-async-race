@@ -4,7 +4,7 @@ import CarIcon from "../GarageComponents/CarIcon";
 
 import type { ICar, IWinner } from "../../types/ApiTypes";
 
-interface WinnerRowProps extends IWinner, ICar {}
+export interface WinnerRowProps extends IWinner, ICar {}
 
 export default function WinnerRow(props: WinnerRowProps): React.ReactNode {
   const { id, name, color, time, wins } = props;
