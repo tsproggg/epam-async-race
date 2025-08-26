@@ -73,7 +73,8 @@ export default function CarTrack(props: ICar): React.ReactNode {
 
     dispatch(setIsOngoing({ ongoing: true, isGlobalRace: false }));
     abortControllerRef.current = new AbortController();
-    const startTimeMs = Date.now();
+
+    let startTimeMs = 0;
     let success = false;
 
     try {
@@ -88,6 +89,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
         animDuration,
       );
 
+      startTimeMs = Date.now();
       success = await EngineService.drive(
         id,
         abortControllerRef.current.signal,
