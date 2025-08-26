@@ -10,11 +10,7 @@ import {
   setName,
   setSelectedCarId,
 } from "../../store/CarPropsInputBufferSlice";
-import {
-  clearStats,
-  setBestTime,
-  setIsOngoing,
-} from "../../store/RaceStatsSlice";
+import { setIsOngoing } from "../../store/RaceStateSlice";
 import "../garageStyles.scss";
 import createCarAnimation from "./createCarAnimation";
 import { notify } from "../../utils/NotificationManager";
@@ -64,7 +60,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
       abortControllerRef.current = null;
     }
 
-    dispatch(clearStats());
+    dispatch(setIsOngoing({ ongoing: false, isGlobalRace: false }));
     EngineService.stopEngine(id);
   }, [dispatch, id]);
 
@@ -89,8 +85,8 @@ export default function CarTrack(props: ICar): React.ReactNode {
         animDuration,
       );
       carAnimationRef.current?.play();
-
       startTimeMs = Date.now();
+
       success = await EngineService.drive(
         id,
         abortControllerRef.current.signal,
@@ -111,14 +107,6 @@ export default function CarTrack(props: ICar): React.ReactNode {
       carAnimationRef.current?.pause();
       notify("Sorry, the car broke down :(", stopCarHandler);
     } else {
-      dispatch(
-        setBestTime({
-          ongoing: false,
-          isGlobalRace: false,
-          winnerId: id,
-          bestTime: raceTime,
-        }),
-      );
       notify(
         `The car reached finish point in ${(raceTime / 1000).toFixed(3)} seconds`,
         stopCarHandler,
@@ -141,7 +129,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
     <section
       id={"carTrack"}
       className={
-        "flex flex-start flex-1 flex-col sm:flex-row border border-black rounded-3xl px-15 py-5"
+        "relative flex flex-start flex-1 flex-col sm:flex-row border border-black rounded-3xl px-15 py-5"
       }
     >
       <div className={"w-auto sm:w-160 text-center"} id="controls">

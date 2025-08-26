@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import CarPropsInputBufferSlice from "./CarPropsInputBufferSlice";
 import NotificationSlice from "./NotificationSlice";
-import RaceStatsSlice from "./RaceStatsSlice";
+import RaceStateSlice from "./RaceStateSlice";
 import sliceFactory from "./SliceFactory";
 
 import type { ICar, IWinner } from "../types/ApiTypes";
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
   garage: GarageSlice.reducer,
   winners: WinnersSlice.reducer,
   carPropsInputBufferSlice: CarPropsInputBufferSlice.reducer,
-  raceStatsSlice: RaceStatsSlice.reducer,
+  raceStatsSlice: RaceStateSlice.reducer,
 
   notificationSlice: NotificationSlice.reducer,
 });
@@ -24,7 +24,6 @@ const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
 
 export default store;
 export { GarageSlice, WinnersSlice };
