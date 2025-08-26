@@ -66,7 +66,7 @@ export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
         <div className={"flex justify-around mb-10"} id="popupHeader">
           <h5 className={"font-bold text-xl"}>{popupName}</h5>
           <button
-            className={"ml-10 w-70"}
+            className={"ml-10 w-70 h-30"}
             id="closePopup"
             onClick={() => setIsOpened(false)}
             type="button"
