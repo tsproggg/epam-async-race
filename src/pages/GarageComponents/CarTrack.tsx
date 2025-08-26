@@ -88,6 +88,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
         trackRef.current,
         animDuration,
       );
+      carAnimationRef.current?.play();
 
       startTimeMs = Date.now();
       success = await EngineService.drive(

@@ -2,12 +2,12 @@ export default function createCarAnimation(
   car: HTMLDivElement,
   track: HTMLDivElement,
   duration: number,
-): Animation | null {
+): Animation {
   // Suppressed for DOM manipulation
   // eslint-disable-next-line no-param-reassign
   car.style.position = "absolute";
 
-  return car.animate(
+  const animation = car.animate(
     [
       {
         left: 0,
@@ -23,4 +23,7 @@ export default function createCarAnimation(
       iterations: 1,
     },
   );
+  animation.pause();
+
+  return animation;
 }
