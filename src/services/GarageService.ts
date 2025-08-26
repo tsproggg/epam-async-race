@@ -1,4 +1,5 @@
 import { Links, makeApiUrl } from "../Links";
+import WinnersService from "./WinnersService";
 import { clearBuffer } from "../store/CarPropsInputBufferSlice";
 import store, { GarageSlice } from "../store/store";
 import { carModels, hexColorRegex, hexColors } from "../types/GlobalConst";
@@ -58,19 +59,20 @@ export default class GarageService {
   }
 
   static deleteCar(id: number): boolean {
-    // TODO: When the winners endpoints logic ready, remove the car from the leaderboard too
     if (id < 0) return false;
 
-    fetchHelper<object>({
+    fetchHelper({
       url: makeApiUrl(Links.ENDP_GARAGE, id.toString()),
       method: "DELETE",
       isJsonBody: false,
-    }).catch((error: string) => {
-      if (JSON.parse(error).status === 404) {
-        return false;
-      }
-      throw new Error(error);
-    });
+    })
+      .then(() => WinnersService.removeWinner(id))
+      .catch((error: string) => {
+        if (JSON.parse(error).status === 404) {
+          return false;
+        }
+        throw new Error(error);
+      });
 
     store.dispatch(GarageSlice.actions.removeItem(id));
     return true;
