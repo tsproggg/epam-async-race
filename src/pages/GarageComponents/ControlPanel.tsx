@@ -19,7 +19,7 @@ export default function ControlPanel(): React.ReactNode {
   const dispatch = useDispatch();
 
   // TODO: Handle race states for car addition/update requests
-  // TODO: GLOBAL: Add error handling popups
+  // TODO: GLOBAL: Add full error handling
   return (
     <section>
       <div

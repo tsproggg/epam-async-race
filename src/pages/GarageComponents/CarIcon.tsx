@@ -11,7 +11,6 @@ export default function CarIcon(props: {
   const { color, size = 100 } = props;
 
   useEffect(() => {
-    // TODO: Mention in readme: To keep things simple, only hex-colors are allowed
     if (hexColorRegex.test(color)) {
       setFillColor(color);
     } else {

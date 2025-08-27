@@ -120,7 +120,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
   }, [selectedCarId, id]);
 
   // TODO: Handle race states before sending deletion requests
-  // TODO: Make animation starting instantly without /start request overhead or an alternative UI sign
+  // TODO: Make animation starting instantly without /start request overhead or use an alternative UI sign
   return (
     <section
       id={"carTrack"}
