@@ -4,14 +4,16 @@ import CarIcon from "../GarageComponents/CarIcon";
 
 import type { ICar, IWinner } from "../../types/ApiTypes";
 
-export interface WinnerRowProps extends IWinner, ICar {}
+export interface WinnerRowProps extends IWinner, ICar {
+  rowNumber: number;
+}
 
 export default function WinnerRow(props: WinnerRowProps): React.ReactNode {
-  const { id, name, color, time, wins } = props;
+  const { rowNumber, name, color, time, wins } = props;
 
   return (
     <tr className={"h-30"} id={"winnerRow"}>
-      <td className={"max-w-40"}>{id}</td>
+      <td className={"max-w-40"}>{rowNumber}</td>
       <td className={"w-100 "}>
         <div className="flex justify-center">
           <CarIcon color={color} size={50} />

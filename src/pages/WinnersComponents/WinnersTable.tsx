@@ -32,7 +32,7 @@ export default function WinnersTable(): React.ReactNode {
         winnerSorted.sort((a: IWinner, b: IWinner) => b.wins - a.wins);
         break;
       default:
-        // Invalid values and sorting by id => sorting by id
+        // Invalid values => sorting by id
         winnerSorted.sort((a: IWinner, b: IWinner) => a.id - b.id);
     }
 
@@ -58,7 +58,6 @@ export default function WinnersTable(): React.ReactNode {
             onChange={(e) => setSorting(e.target.value)}
             value={sorting}
           >
-            <option value="id">ID</option>
             <option value="bt-asc">Best time - ascending</option>
             <option value="bt-desc">Best time - descending</option>
             <option value="w-asc">Wins - ascending</option>
@@ -69,7 +68,7 @@ export default function WinnersTable(): React.ReactNode {
       <table className={"mt-20 text-center w-10/10"}>
         <thead>
           <tr className={"border-b [&>th]:not-last-of-type:border-r"}>
-            <th>ID</th>
+            <th>#</th>
             <th>Icon</th>
             <th>Name</th>
             <th>Wins</th>
@@ -77,21 +76,25 @@ export default function WinnersTable(): React.ReactNode {
           </tr>
         </thead>
         <tbody>
-          {winnersRenderList.slice(page * 10, (page + 1) * 10).map((winner) => (
-            <WinnerRow
-              key={winner.id}
-              color={winner.color}
-              id={winner.id}
-              name={winner.name}
-              time={winner.time}
-              wins={winner.wins}
-            />
-          ))}
+          {winnersRenderList
+            .slice(page * 10, (page + 1) * 10)
+            .map((winner, i: number) => (
+              <WinnerRow
+                key={winner.id}
+                color={winner.color}
+                id={winner.id}
+                name={winner.name}
+                rowNumber={i + 1}
+                time={winner.time}
+                wins={winner.wins}
+              />
+            ))}
         </tbody>
       </table>
       <div
-        className={"mt-15 w-10/10 flex flex-wrap justify-center gap-15"}
+        className={"mt-15 w-10/10 flex-wrap justify-center gap-15"}
         id="paginationControls"
+        style={{ display: winnersList.length === 0 ? "none" : "flex" }}
       >
         <button
           id="prevPage"
