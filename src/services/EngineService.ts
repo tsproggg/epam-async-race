@@ -65,7 +65,7 @@ export default class EngineService {
 
       return res.success;
     } catch (e) {
-      if (typeof e === "object" && e !== null && "status" in e) {
+      if (e !== null && typeof e === "object" && "status" in e) {
         if (e.status === 400 || e.status === 404) {
           throw new Error("Invalid car id");
         }

@@ -70,9 +70,6 @@ export default function CarTrack(props: ICar): React.ReactNode {
     dispatch(setIsOngoing({ ongoing: true, isGlobalRace: false }));
     abortControllerRef.current = new AbortController();
 
-    let startTimeMs = 0;
-    let success = false;
-
     try {
       const animDuration = await EngineService.startEngine(
         id,
@@ -85,38 +82,37 @@ export default function CarTrack(props: ICar): React.ReactNode {
         animDuration,
       );
       carAnimationRef.current?.play();
-      startTimeMs = Date.now();
+      const startTimeMs = Date.now();
 
-      success = await EngineService.drive(
+      const success = await EngineService.drive(
         id,
         abortControllerRef.current.signal,
       );
+
+      const raceTime = Date.now() - startTimeMs;
+
+      if (!success) {
+        carAnimationRef.current?.pause();
+        notify("Sorry, the car broke down :(", stopCarHandler);
+      } else {
+        notify(
+          `The car reached finish point in ${(raceTime / 1000).toFixed(3)} seconds`,
+          stopCarHandler,
+        );
+      }
     } catch (e) {
       carAnimationRef.current?.pause();
-
       if (e instanceof Error && e.name === "AbortError") {
         notify("Race was stopped", stopCarHandler);
       } else {
         notify("Sorry, the car broke down :(", stopCarHandler);
       }
+    } finally {
+      EngineService.stopEngine(id);
+      abortControllerRef.current = null;
+
+      dispatch(setIsOngoing({ ongoing: false, isGlobalRace: false }));
     }
-
-    const raceTime = Date.now() - startTimeMs;
-
-    if (!success) {
-      carAnimationRef.current?.pause();
-      notify("Sorry, the car broke down :(", stopCarHandler);
-    } else {
-      notify(
-        `The car reached finish point in ${(raceTime / 1000).toFixed(3)} seconds`,
-        stopCarHandler,
-      );
-    }
-
-    EngineService.stopEngine(id);
-    abortControllerRef.current = null;
-
-    dispatch(setIsOngoing({ ongoing: false, isGlobalRace: false }));
   };
 
   useEffect(() => {
