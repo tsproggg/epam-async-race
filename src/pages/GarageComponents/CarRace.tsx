@@ -16,8 +16,15 @@ export default function CarRace(): React.ReactNode {
   return (
     <section className="pl-20 pr-20">
       <div
-        className={"flex-1 flex flex-col justify-center gap-7"}
+        className="h-60 my-25 text-xl text-center"
+        style={{ display: carsList.length === 0 ? "block" : "none" }}
+      >
+        <h3>No cars added</h3>
+      </div>
+      <div
+        className={"flex-1 flex-col justify-center gap-7"}
         id="raceTrack"
+        style={{ display: carsList.length === 0 ? "none" : "flex" }}
       >
         {carsList.map((car: ICar, i: number) => {
           if (i >= page * 7 && i < (page + 1) * 7) {
@@ -36,8 +43,9 @@ export default function CarRace(): React.ReactNode {
       </div>
 
       <div
-        className={"mt-15 flex flex-wrap justify-center gap-15"}
+        className={"mt-15 flex-wrap justify-center gap-15"}
         id="paginationControls"
+        style={{ display: carsList.length === 0 ? "none" : "flex" }}
       >
         <button
           id="prevPage"
