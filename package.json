@@ -7,8 +7,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "preview": "vite preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "format": "prettier --write .",
+    "ci:format": "prettier --check ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",

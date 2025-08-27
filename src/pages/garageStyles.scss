@@ -1,5 +1,6 @@
 #delete,
-#stop, #closePopup {
+#stop,
+#closePopup {
   border-color: #ef4444;
 
   &:is(:hover, :active) {
@@ -7,24 +8,27 @@
   }
 }
 
-#raceReset, #updateCar {
-  border-color: #F97316;
+#raceReset,
+#updateCar {
+  border-color: #f97316;
 
   &:is(:hover, :active) {
-    background-color: #F97316;
+    background-color: #f97316;
   }
 }
 
 #generateCars {
-  border-color: #3B82F6;
+  border-color: #3b82f6;
 
   &:is(:hover, :active) {
-    background-color: #3B82F6;
+    background-color: #3b82f6;
   }
 }
 
 #prevPage,
-#nextPage, #addCar, #updateCar {
+#nextPage,
+#addCar,
+#updateCar {
   flex-grow: 0;
   padding: 2px 10px;
 }
@@ -32,7 +36,8 @@
 #track {
   position: relative;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: "";
     position: absolute;
     top: 15px;
