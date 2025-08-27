@@ -21,6 +21,23 @@ export default class GarageService {
     return cars;
   }
 
+  static async getCar(id: number): Promise<ICar> {
+    if (id < 0) throw new Error("Invalid car id");
+
+    let car: ICar;
+    try {
+      car = await fetchHelper<ICar>({
+        url: makeApiUrl(Links.ENDP_GARAGE, id.toString()),
+        method: "GET",
+        isJsonBody: false,
+      });
+    } catch (e) {
+      throw new Error("Invalid car id");
+    }
+
+    return car;
+  }
+
   static async addCar(name: string, color: string): Promise<ICar> {
     if (!name || !hexColorRegex.test(color)) {
       throw new Error("Invalid arguments");
