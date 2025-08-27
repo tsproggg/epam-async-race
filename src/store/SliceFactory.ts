@@ -4,7 +4,7 @@ import binarySearch from "../utils/binarySearch";
 
 import type { Draft, PayloadAction } from "@reduxjs/toolkit";
 
-import type { IndexedObject } from "../types/IndexedObject";
+import type { IndexedObject } from "../types/Interfaces";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function sliceFactory<T extends IndexedObject>(

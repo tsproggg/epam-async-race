@@ -1,4 +1,4 @@
-import type { IndexedObject } from "../types/IndexedObject";
+import type { IndexedObject } from "../types/Interfaces";
 
 /**
  * Returns:

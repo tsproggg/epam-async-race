@@ -2,3 +2,8 @@
 export interface IndexedObject {
   id: number;
 }
+
+export interface IRaceState {
+  isGlobalRace: boolean;
+  ongoing: boolean;
+}

@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import type { IRaceStats } from "../types/GlobalConst";
+import type { IRaceState } from "../types/Interfaces";
 
-const initialState: IRaceStats = {
+const initialState: IRaceState = {
   isGlobalRace: false,
   ongoing: false,
 };
@@ -14,7 +14,7 @@ const RaceStateSlice = createSlice({
   initialState,
   reducers: {
     setIsOngoing(
-      state: IRaceStats,
+      state: IRaceState,
       action: PayloadAction<{ ongoing: boolean; isGlobalRace: boolean }>,
     ) {
       return {

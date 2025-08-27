@@ -1,4 +1,4 @@
-import type { IndexedObject } from "./IndexedObject";
+import type { IndexedObject } from "./Interfaces";
 
 export interface ICar extends IndexedObject {
   name: string;

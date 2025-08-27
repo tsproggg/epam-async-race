@@ -1,8 +1,3 @@
-export interface IRaceStats {
-  isGlobalRace: boolean;
-  ongoing: boolean;
-}
-
 export const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 export const hexColors = [
