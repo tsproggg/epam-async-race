@@ -34,7 +34,7 @@ export default function CarRace(): React.ReactNode {
       >
         {carsList
           .slice(page * CARS_PER_PAGE, (page + 1) * CARS_PER_PAGE)
-          .map((car: ICar, i: number) => (
+          .map((car: ICar) => (
             <CarTrack
               key={car.id}
               color={car.color}
