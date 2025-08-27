@@ -2,7 +2,11 @@ import { Links, makeApiUrl } from "../Links";
 import WinnersService from "./WinnersService";
 import { clearBuffer } from "../store/CarPropsInputBufferSlice";
 import store, { GarageSlice } from "../store/store";
-import { carModels, hexColorRegex, hexColors } from "../types/GlobalConst";
+import {
+  carModelsByBrand,
+  hexColorRegex,
+  hexColors,
+} from "../types/GlobalConst";
 import fetchHelper from "../utils/fetchHelper";
 import randomItem from "../utils/randomItem";
 
@@ -118,7 +122,11 @@ export default class GarageService {
 
   static generateCars(carsNumber: number): void {
     for (let i = 0; i < carsNumber; i += 1) {
-      this.addCar(randomItem(carModels) ?? "", randomItem(hexColors) ?? "");
+      const brand = randomItem(Object.keys(carModelsByBrand)) ?? "";
+      this.addCar(
+        `${brand} ${randomItem(carModelsByBrand[brand])}`,
+        randomItem(hexColors) ?? "",
+      );
     }
   }
 }
