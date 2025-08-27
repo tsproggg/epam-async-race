@@ -1,3 +1,13 @@
+export const WinnersSorting = {
+  TIME_ASC: "t-asc",
+  TIME_DESC: "t-desc",
+  WINS_ASC: "w-asc",
+  WINS_DESC: "w-desc",
+} as const;
+
+export type WinnersSorting =
+  (typeof WinnersSorting)[keyof typeof WinnersSorting];
+
 export const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
 export const hexColors = [

@@ -1,34 +1,46 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import WinnerRow from "./WinnerRow";
+import {
+  setWinnersListPage,
+  setWinnersSorting,
+} from "../../store/StatePersistenceSlice";
+import { WinnersSorting } from "../../types/GlobalConst";
 
 import type { RootState } from "../../store/store";
 import type { ICar, IWinner } from "../../types/ApiTypes";
 
 export default function WinnersTable(): React.ReactNode {
-  const [page, setPage] = useState<number>(0);
-  const [sorting, setSorting] = useState<string>("w-desc");
+  const ROWS_PER_PAGE = 10;
 
+  const page = useSelector(
+    (state: RootState) => state.statePersistenceSlice.winnersListPage,
+  );
+  const sorting: WinnersSorting = useSelector(
+    (state: RootState) => state.statePersistenceSlice.winnersSorting,
+  );
   const winnersList: IWinner[] = useSelector(
     (state: RootState) => state.winners,
   );
   const carsList: ICar[] = useSelector((state: RootState) => state.garage);
 
+  const dispatch = useDispatch();
+
   const winnersRenderList = useMemo(() => {
     const winnerSorted: IWinner[] = [...winnersList];
     switch (sorting) {
-      case "bt-asc":
+      case WinnersSorting.TIME_ASC:
         winnerSorted.sort((a: IWinner, b: IWinner) => a.time - b.time);
         break;
-      case "bt-desc":
+      case WinnersSorting.TIME_DESC:
         winnerSorted.sort((a: IWinner, b: IWinner) => b.time - a.time);
         break;
-      case "w-asc":
+      case WinnersSorting.WINS_ASC:
         winnerSorted.sort((a: IWinner, b: IWinner) => a.wins - b.wins);
         break;
-      case "w-desc":
+      case WinnersSorting.WINS_DESC:
         winnerSorted.sort((a: IWinner, b: IWinner) => b.wins - a.wins);
         break;
       default:
@@ -55,13 +67,19 @@ export default function WinnersTable(): React.ReactNode {
             className={"border"}
             id="sortingOptions"
             name="sortingOptions"
-            onChange={(e) => setSorting(e.target.value)}
             value={sorting}
+            onChange={(e) =>
+              dispatch(setWinnersSorting(e.target.value as WinnersSorting))
+            }
           >
-            <option value="bt-asc">Best time - ascending</option>
-            <option value="bt-desc">Best time - descending</option>
-            <option value="w-asc">Wins - ascending</option>
-            <option value="w-desc">Wins - descending</option>
+            <option value={WinnersSorting.TIME_ASC}>
+              Best time - ascending
+            </option>
+            <option value={WinnersSorting.TIME_DESC}>
+              Best time - descending
+            </option>
+            <option value={WinnersSorting.WINS_ASC}>Wins - ascending</option>
+            <option value={WinnersSorting.WINS_DESC}>Wins - descending</option>
           </select>
         </label>
       </div>
@@ -77,7 +95,7 @@ export default function WinnersTable(): React.ReactNode {
         </thead>
         <tbody>
           {winnersRenderList
-            .slice(page * 10, (page + 1) * 10)
+            .slice(page * ROWS_PER_PAGE, (page + 1) * ROWS_PER_PAGE)
             .map((winner, i: number) => (
               <WinnerRow
                 key={winner.id}
@@ -98,26 +116,30 @@ export default function WinnersTable(): React.ReactNode {
       >
         <button
           id="prevPage"
-          onClick={() => setPage(page - 1 < 0 ? 0 : page - 1)}
           type={"button"}
+          onClick={() =>
+            dispatch(setWinnersListPage(page - 1 < 0 ? 0 : page - 1))
+          }
         >
           <span>{"<="} PREVIOUS PAGE</span>
         </button>
         <p>
           PAGE{" "}
-          {page + 1 <= Math.ceil(winnersList.length / 10)
+          {page + 1 <= Math.ceil(winnersList.length / ROWS_PER_PAGE)
             ? page + 1
-            : Math.ceil(winnersList.length / 10)}{" "}
-          / {Math.ceil(winnersList.length / 10)}
+            : Math.ceil(winnersList.length / ROWS_PER_PAGE)}{" "}
+          / {Math.ceil(winnersList.length / ROWS_PER_PAGE)}
         </p>
         <button
           id="nextPage"
           type={"button"}
           onClick={() =>
-            setPage(
-              page + 1 <= Math.ceil(winnersList.length / 10) - 1
-                ? page + 1
-                : Math.ceil(winnersList.length / 10) - 1,
+            dispatch(
+              setWinnersListPage(
+                page + 1 <= Math.ceil(winnersList.length / ROWS_PER_PAGE) - 1
+                  ? page + 1
+                  : Math.ceil(winnersList.length / ROWS_PER_PAGE) - 1,
+              ),
             )
           }
         >

@@ -4,6 +4,7 @@ import CarPropsInputBufferSlice from "./CarPropsInputBufferSlice";
 import NotificationSlice from "./NotificationSlice";
 import RaceStateSlice from "./RaceStateSlice";
 import sliceFactory from "./SliceFactory";
+import StatePersistenceSlice from "./StatePersistenceSlice";
 
 import type { ICar, IWinner } from "../types/ApiTypes";
 
@@ -13,8 +14,10 @@ const [WinnersSlice] = sliceFactory<IWinner>("WinnersSlice", []);
 const rootReducer = combineReducers({
   garage: GarageSlice.reducer,
   winners: WinnersSlice.reducer,
+
   carPropsInputBufferSlice: CarPropsInputBufferSlice.reducer,
   raceStatsSlice: RaceStateSlice.reducer,
+  statePersistenceSlice: StatePersistenceSlice.reducer,
 
   notificationSlice: NotificationSlice.reducer,
 });

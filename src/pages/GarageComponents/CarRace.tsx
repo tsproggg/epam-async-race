@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "../garageStyles.scss";
 import CarTrack from "./CarTrack";
+import { setGarageListPage } from "../../store/StatePersistenceSlice";
 
 import type { RootState } from "../../store/store";
 import type { ICar } from "../../types/ApiTypes";
 
 export default function CarRace(): React.ReactNode {
+  const CARS_PER_PAGE = 7;
+
   const carsList: ICar[] = useSelector((state: RootState) => state.garage);
-  const [page, setPage] = useState<number>(0);
+  const page = useSelector(
+    (state: RootState) => state.statePersistenceSlice.garageListPage,
+  );
+  const dispatch = useDispatch();
 
   // TODO: Handle race states before car generation
   return (
@@ -26,20 +32,16 @@ export default function CarRace(): React.ReactNode {
         id="raceTrack"
         style={{ display: carsList.length === 0 ? "none" : "flex" }}
       >
-        {carsList.map((car: ICar, i: number) => {
-          if (i >= page * 7 && i < (page + 1) * 7) {
-            return (
-              <CarTrack
-                key={car.id}
-                color={car.color}
-                id={car.id}
-                name={car.name}
-              />
-            );
-          }
-
-          return null;
-        })}
+        {carsList
+          .slice(page * CARS_PER_PAGE, (page + 1) * CARS_PER_PAGE)
+          .map((car: ICar, i: number) => (
+            <CarTrack
+              key={car.id}
+              color={car.color}
+              id={car.id}
+              name={car.name}
+            />
+          ))}
       </div>
 
       <div
@@ -49,26 +51,30 @@ export default function CarRace(): React.ReactNode {
       >
         <button
           id="prevPage"
-          onClick={() => setPage(page - 1 < 0 ? 0 : page - 1)}
           type={"button"}
+          onClick={() =>
+            dispatch(setGarageListPage(page - 1 < 0 ? 0 : page - 1))
+          }
         >
           <span>{"<="} PREVIOUS PAGE</span>
         </button>
         <p>
           PAGE{" "}
-          {page + 1 <= Math.ceil(carsList.length / 7)
+          {page + 1 <= Math.ceil(carsList.length / CARS_PER_PAGE)
             ? page + 1
-            : Math.ceil(carsList.length / 7)}{" "}
-          / {Math.ceil(carsList.length / 7)}
+            : Math.ceil(carsList.length / CARS_PER_PAGE)}{" "}
+          / {Math.ceil(carsList.length / CARS_PER_PAGE)}
         </p>
         <button
           id="nextPage"
           type={"button"}
           onClick={() =>
-            setPage(
-              page + 1 <= Math.ceil(carsList.length / 7) - 1
-                ? page + 1
-                : Math.ceil(carsList.length / 7) - 1,
+            dispatch(
+              setGarageListPage(
+                page + 1 <= Math.ceil(carsList.length / CARS_PER_PAGE) - 1
+                  ? page + 1
+                  : Math.ceil(carsList.length / CARS_PER_PAGE) - 1,
+              ),
             )
           }
         >
