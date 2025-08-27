@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ColorPicker from "../../components/ColorPicker";
 import GarageService from "../../services/GarageService";
 import { setName } from "../../store/CarPropsInputBufferSlice";
+import { notify } from "../../utils/NotificationManager";
 
 import type { RootState } from "../../store/store";
 
@@ -41,7 +42,12 @@ export default function ControlPanel(): React.ReactNode {
           id="addCar"
           type={"button"}
           onClick={() => {
-            GarageService.addCarFromStore();
+            GarageService.addCarFromStore().catch(() => {
+              // no need to mention color since it can't be invalid
+              notify(
+                `Car name should be in range of ${GarageService.MIN_CAR_NAME_LENGTH} - ${GarageService.MAX_CAR_NAME_LENGTH} symbols`,
+              );
+            });
           }}
         >
           <span>Add new car</span>
@@ -50,7 +56,12 @@ export default function ControlPanel(): React.ReactNode {
           id="updateCar"
           type={"button"}
           onClick={() => {
-            GarageService.updateCar();
+            GarageService.updateCar().catch(() => {
+              // no need to mention color since it can't be invalid
+              notify(
+                `Car name should be in range of ${GarageService.MIN_CAR_NAME_LENGTH} - ${GarageService.MAX_CAR_NAME_LENGTH} symbols`,
+              );
+            });
           }}
         >
           <span>Update selected car</span>

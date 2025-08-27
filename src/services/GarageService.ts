@@ -9,6 +9,10 @@ import randomItem from "../utils/randomItem";
 import type { ICar } from "../types/ApiTypes";
 
 export default class GarageService {
+  static MAX_CAR_NAME_LENGTH = 80;
+
+  static MIN_CAR_NAME_LENGTH = 2;
+
   static async getGarage(): Promise<ICar[]> {
     const cars: ICar[] = await fetchHelper<ICar[]>({
       url: makeApiUrl(Links.ENDP_GARAGE),
@@ -39,7 +43,12 @@ export default class GarageService {
   }
 
   static async addCar(name: string, color: string): Promise<ICar> {
-    if (!name || !hexColorRegex.test(color)) {
+    if (
+      !name ||
+      name.length < this.MIN_CAR_NAME_LENGTH ||
+      name.length > this.MAX_CAR_NAME_LENGTH ||
+      !hexColorRegex.test(color)
+    ) {
       throw new Error("Invalid arguments");
     }
 
@@ -56,7 +65,13 @@ export default class GarageService {
 
   static async updateCar(): Promise<ICar> {
     const state = store.getState().carPropsInputBufferSlice;
-    if (!state?.name || state.id < 0 || !hexColorRegex.test(state.color)) {
+    if (
+      !state?.name ||
+      state.name.length < this.MIN_CAR_NAME_LENGTH ||
+      state.name.length > this.MAX_CAR_NAME_LENGTH ||
+      state.id < 0 ||
+      !hexColorRegex.test(state.color)
+    ) {
       throw new Error("No car props found or invalid arguments");
     }
 
