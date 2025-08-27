@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 import "../garageStyles.scss";
 import CarTrack from "./CarTrack";
-import GarageService from "../../services/GarageService";
 
 import type { RootState } from "../../store/store";
 import type { ICar } from "../../types/ApiTypes";
@@ -16,33 +15,6 @@ export default function CarRace(): React.ReactNode {
   // TODO: Handle race states before car generation
   return (
     <section className="pl-20 pr-20">
-      <div className={"flex flex-wrap justify-around mb-15"} id="race-controls">
-        <h2 className={"text-center text-2xl font-bold"}>Race track</h2>
-        <div className={"flex justify-center gap-10"} id="raceButtons">
-          <button
-            id="raceStart"
-            onClick={() => alert("placeholder")}
-            type={"button"}
-          >
-            <span>START RACE</span>
-          </button>
-          <button
-            id="raceReset"
-            onClick={() => alert("placeholder")}
-            type={"button"}
-          >
-            <span>RESET</span>
-          </button>
-          <button
-            id="generateCars"
-            onClick={() => GarageService.generateCars(100)}
-            type={"button"}
-          >
-            <span>GENERATE 100 CARS</span>
-          </button>
-        </div>
-      </div>
-
       <div
         className={"flex-1 flex flex-col justify-center gap-7"}
         id="raceTrack"

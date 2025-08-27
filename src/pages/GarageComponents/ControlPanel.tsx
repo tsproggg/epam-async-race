@@ -21,53 +21,81 @@ export default function ControlPanel(): React.ReactNode {
   // TODO: Handle race states for car addition/update requests
   // TODO: GLOBAL: Add error handling popups
   return (
-    <section
-      className={"my-15 pb-15 border-b flex justify-around flex-wrap"}
-      id="GarageControlPanel"
-    >
+    <section>
       <div
-        className={"flex justify-center items-center flex-wrap gap-10"}
-        id="controlPanel"
+        className={"my-15 pb-15 border-b flex justify-around flex-wrap"}
+        id="GarageControlPanel"
       >
-        <input
-          className={"border-b-1"}
-          id={"carNameInput"}
-          onChange={(e) => dispatch(setName(e.target.value))}
-          placeholder={"Enter car name..."}
-          type="text"
-          value={carPropsName}
-        />
-        <ColorPicker />
-        <button
-          id="addCar"
-          type={"button"}
-          onClick={() => {
-            GarageService.addCarFromStore().catch(() => {
-              // no need to mention color since it can't be invalid
-              notify(
-                `Car name should be in range of ${GarageService.MIN_CAR_NAME_LENGTH} - ${GarageService.MAX_CAR_NAME_LENGTH} symbols`,
-              );
-            });
-          }}
+        <div
+          className={"flex justify-center items-center flex-wrap gap-10"}
+          id="controlPanel"
         >
-          <span>Add new car</span>
-        </button>
-        <button
-          id="updateCar"
-          type={"button"}
-          onClick={() => {
-            GarageService.updateCar().catch(() => {
-              // no need to mention color since it can't be invalid
-              notify(
-                `Car name should be in range of ${GarageService.MIN_CAR_NAME_LENGTH} - ${GarageService.MAX_CAR_NAME_LENGTH} symbols`,
-              );
-            });
-          }}
-        >
-          <span>Update selected car</span>
-        </button>
+          <input
+            className={"border-b-1"}
+            id={"carNameInput"}
+            onChange={(e) => dispatch(setName(e.target.value))}
+            placeholder={"Enter car name..."}
+            type="text"
+            value={carPropsName}
+          />
+          <ColorPicker />
+          <button
+            id="addCar"
+            type={"button"}
+            onClick={() => {
+              GarageService.addCarFromStore().catch(() => {
+                // no need to mention color since it can't be invalid
+                notify(
+                  `Car name should be in range of ${GarageService.MIN_CAR_NAME_LENGTH} - ${GarageService.MAX_CAR_NAME_LENGTH} symbols`,
+                );
+              });
+            }}
+          >
+            <span>Add new car</span>
+          </button>
+          <button
+            id="updateCar"
+            type={"button"}
+            onClick={() => {
+              GarageService.updateCar().catch(() => {
+                // no need to mention color since it can't be invalid
+                notify(
+                  `Car name should be in range of ${GarageService.MIN_CAR_NAME_LENGTH} - ${GarageService.MAX_CAR_NAME_LENGTH} symbols`,
+                );
+              });
+            }}
+          >
+            <span>Update selected car</span>
+          </button>
+        </div>
+        <h3 className={"text-xl"}>Cars total: {carsAmount}</h3>
       </div>
-      <h3 className={"text-xl"}>Cars total: {carsAmount}</h3>
+      <div className={"flex flex-wrap justify-around mb-15"} id="race-controls">
+        <h2 className={"text-center text-2xl font-bold"}>Race track</h2>
+        <div className={"flex justify-center gap-10"} id="raceButtons">
+          <button
+            id="raceStart"
+            onClick={() => alert("placeholder")}
+            type={"button"}
+          >
+            <span>START RACE</span>
+          </button>
+          <button
+            id="raceReset"
+            onClick={() => alert("placeholder")}
+            type={"button"}
+          >
+            <span>RESET</span>
+          </button>
+          <button
+            id="generateCars"
+            onClick={() => GarageService.generateCars(100)}
+            type={"button"}
+          >
+            <span>GENERATE 100 CARS</span>
+          </button>
+        </div>
+      </div>
     </section>
   );
 }
