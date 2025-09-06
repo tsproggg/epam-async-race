@@ -20,7 +20,7 @@ export default function sliceFactory<T extends IndexedObject>(
         return action.payload.sort((a: T, b: T) => a.id - b.id);
       },
 
-      clearItems(_, __: PayloadAction<null>) {
+      clearItems(_, __: PayloadAction) {
         return [];
       },
 
