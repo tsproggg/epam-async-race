@@ -46,7 +46,11 @@ export default class GarageService {
     return car;
   }
 
-  static async addCar(name: string, color: string): Promise<ICar> {
+  static async addCar(
+    name: string,
+    color: string,
+    noStateChange = false,
+  ): Promise<ICar> {
     if (
       !name ||
       name.length < this.MIN_CAR_NAME_LENGTH ||
@@ -63,7 +67,9 @@ export default class GarageService {
       body: { name, color },
     });
 
-    store.dispatch(GarageSlice.actions.addItem(carAdded));
+    if (!noStateChange) {
+      store.dispatch(GarageSlice.actions.addItem(carAdded));
+    }
     return carAdded;
   }
 
@@ -120,13 +126,20 @@ export default class GarageService {
     return this.addCar(state.name, state.color);
   }
 
-  static generateCars(carsNumber: number): void {
+  static async generateCars(carsNumber: number): Promise<void> {
+    const carPromises: Promise<ICar>[] = [];
     for (let i = 0; i < carsNumber; i += 1) {
       const brand = randomItem(Object.keys(carModelsByBrand)) ?? "";
-      this.addCar(
-        `${brand} ${randomItem(carModelsByBrand[brand])}`,
-        randomItem(hexColors) ?? "",
+      carPromises.push(
+        this.addCar(
+          `${brand} ${randomItem(carModelsByBrand[brand])}`,
+          randomItem(hexColors) ?? "",
+          true,
+        ),
       );
     }
+
+    const newCars = await Promise.all(carPromises);
+    store.dispatch(GarageSlice.actions.addItemsBulk(newCars));
   }
 }

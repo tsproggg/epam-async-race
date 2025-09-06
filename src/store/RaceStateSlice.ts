@@ -7,24 +7,29 @@ import type { IRaceState } from "../types/Interfaces";
 const initialState: IRaceState = {
   isGlobalRace: false,
   ongoing: false,
+  racingCarId: -1,
+  resetAnimations: false,
 };
 
 const RaceStateSlice = createSlice({
-  name: "RaceStatsSlice",
+  name: "RaceStateSlice",
   initialState,
   reducers: {
     setIsOngoing(
       state: IRaceState,
-      action: PayloadAction<{ ongoing: boolean; isGlobalRace: boolean }>,
+      action: PayloadAction<{
+        isGlobalRace: boolean;
+        ongoing: boolean;
+        racingCarId: number;
+      }>,
     ) {
-      return {
-        ...state,
-        ongoing: action.payload.ongoing,
-        isGlobalRace: action.payload.isGlobalRace,
-      };
+      return { ...state, ...action.payload };
+    },
+    resetAnimations(state: IRaceState, action: PayloadAction<boolean>) {
+      return { ...state, resetAnimations: action.payload };
     },
   },
 });
 
 export default RaceStateSlice;
-export const { setIsOngoing } = RaceStateSlice.actions;
+export const { setIsOngoing, resetAnimations } = RaceStateSlice.actions;

@@ -7,14 +7,15 @@ import {
   setWinnersListPage,
   setWinnersSorting,
 } from "../../store/StatePersistenceSlice";
-import { WinnersSorting } from "../../types/GlobalConst";
+import {
+  WINNERS_PER_PAGE as ROWS_PER_PAGE,
+  WinnersSorting,
+} from "../../types/GlobalConst";
 
 import type { RootState } from "../../store/store";
 import type { ICar, IWinner } from "../../types/ApiTypes";
 
 export default function WinnersTable(): React.ReactNode {
-  const ROWS_PER_PAGE = 10;
-
   const page = useSelector(
     (state: RootState) => state.statePersistenceSlice.winnersListPage,
   );
@@ -57,14 +58,14 @@ export default function WinnersTable(): React.ReactNode {
 
   return (
     <section
-      className={"w-8/10 mx-auto my-20 flex flex-col justify-center items-end"}
+      className="w-8/10 mx-auto my-20 flex flex-col justify-center items-end"
       id="WinnersTable"
     >
       <div className="sortDropdown">
         <label htmlFor="sortingOptions">
           Sort by:{" "}
           <select
-            className={"border"}
+            className="border"
             id="sortingOptions"
             name="sortingOptions"
             value={sorting}
@@ -83,9 +84,9 @@ export default function WinnersTable(): React.ReactNode {
           </select>
         </label>
       </div>
-      <table className={"mt-20 text-center w-10/10"}>
+      <table className="mt-20 text-center w-10/10">
         <thead>
-          <tr className={"border-b [&>th]:not-last-of-type:border-r"}>
+          <tr className="border-b [&>th]:not-last-of-type:border-r">
             <th>#</th>
             <th>Icon</th>
             <th>Name</th>
@@ -110,13 +111,13 @@ export default function WinnersTable(): React.ReactNode {
         </tbody>
       </table>
       <div
-        className={"mt-15 w-10/10 flex-wrap justify-center gap-15"}
+        className="mt-15 w-10/10 flex-wrap justify-center gap-15"
         id="paginationControls"
         style={{ display: winnersList.length === 0 ? "none" : "flex" }}
       >
         <button
           id="prevPage"
-          type={"button"}
+          type="button"
           onClick={() =>
             dispatch(setWinnersListPage(page - 1 < 0 ? 0 : page - 1))
           }
@@ -132,7 +133,7 @@ export default function WinnersTable(): React.ReactNode {
         </p>
         <button
           id="nextPage"
-          type={"button"}
+          type="button"
           onClick={() =>
             dispatch(
               setWinnersListPage(

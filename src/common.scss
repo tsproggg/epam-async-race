@@ -8,6 +8,7 @@ button {
   border: 1px solid #22c55e;
   border-radius: 9999px;
   padding: 2px 5px;
+  cursor: pointer;
 
   span {
     display: flex;
@@ -18,6 +19,11 @@ button {
   &:is(:hover, :active) {
     color: #fff;
     background-color: #22c55e;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 }
 

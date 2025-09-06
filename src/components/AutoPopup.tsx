@@ -48,7 +48,7 @@ export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
     <div>
       <dialog
         ref={dialogRef}
-        id={"autoPopup"}
+        id="autoPopup"
         onCancel={() => setIsOpened(false)}
         className={`absolute
             ${
@@ -63,10 +63,10 @@ export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
             : {}
         }
       >
-        <div className={"flex justify-around mb-10"} id="popupHeader">
-          <h5 className={"font-bold text-xl"}>{popupName}</h5>
+        <div className="flex justify-around mb-10" id="popupHeader">
+          <h5 className="font-bold text-xl">{popupName}</h5>
           <button
-            className={"ml-10 w-70 h-30"}
+            className="ml-10 w-70 h-30"
             id="closePopup"
             onClick={() => setIsOpened(false)}
             type="button"
@@ -74,7 +74,7 @@ export default function AutoPopup(props: AutoPopupProps): React.ReactNode {
             <span>Close</span>
           </button>
         </div>
-        <div className={"flex justify-center items-center"}>
+        <div className="flex justify-center items-center">
           <div>{popupChildren}</div>
         </div>
       </dialog>

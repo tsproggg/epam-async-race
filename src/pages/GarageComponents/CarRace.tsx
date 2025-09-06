@@ -5,20 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import "../garageStyles.scss";
 import CarTrack from "./CarTrack";
 import { setGarageListPage } from "../../store/StatePersistenceSlice";
+import { CARS_PER_PAGE } from "../../types/GlobalConst";
 
 import type { RootState } from "../../store/store";
 import type { ICar } from "../../types/ApiTypes";
 
 export default function CarRace(): React.ReactNode {
-  const CARS_PER_PAGE = 7;
-
   const carsList: ICar[] = useSelector((state: RootState) => state.garage);
   const page = useSelector(
     (state: RootState) => state.statePersistenceSlice.garageListPage,
   );
   const dispatch = useDispatch();
 
-  // TODO: Handle race states before car generation
   return (
     <section className="pl-20 pr-20">
       <div
@@ -28,7 +26,7 @@ export default function CarRace(): React.ReactNode {
         <h3>No cars added</h3>
       </div>
       <div
-        className={"flex-1 flex-col justify-center gap-7"}
+        className="flex-1 flex-col justify-center gap-7"
         id="raceTrack"
         style={{ display: carsList.length === 0 ? "none" : "flex" }}
       >
@@ -45,13 +43,13 @@ export default function CarRace(): React.ReactNode {
       </div>
 
       <div
-        className={"mt-15 flex-wrap justify-center gap-15"}
+        className="mt-15 flex-wrap justify-center gap-15"
         id="paginationControls"
         style={{ display: carsList.length === 0 ? "none" : "flex" }}
       >
         <button
           id="prevPage"
-          type={"button"}
+          type="button"
           onClick={() =>
             dispatch(setGarageListPage(page - 1 < 0 ? 0 : page - 1))
           }
@@ -67,7 +65,7 @@ export default function CarRace(): React.ReactNode {
         </p>
         <button
           id="nextPage"
-          type={"button"}
+          type="button"
           onClick={() =>
             dispatch(
               setGarageListPage(
