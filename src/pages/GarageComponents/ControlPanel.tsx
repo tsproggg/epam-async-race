@@ -89,7 +89,7 @@ export default function ControlPanel(): React.ReactNode {
           </button>
           <button
             id="generateCars"
-            onClick={() => GarageService.generateCars(100)}
+            onClick={async () => GarageService.generateCars(100)}
             type={"button"}
           >
             <span>GENERATE 100 CARS</span>

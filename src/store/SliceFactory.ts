@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import binarySearch from "../utils/binarySearch";
+import mergeSortedArrays from "../utils/mergeSortedArrays.ts";
 
 import type { Draft, PayloadAction } from "@reduxjs/toolkit";
 
@@ -42,6 +43,28 @@ export default function sliceFactory<T extends IndexedObject>(
         payload.id = state[state.length - 1].id + 1;
 
         return [...state, payload] as T[];
+      },
+
+      addItemsBulk(state: Draft<T[]>, action: PayloadAction<T[]>): T[] {
+        if (action.payload.length === 0) return state as T[];
+        if (state.length === 0) return action.payload;
+
+        let maxId = state[state.length - 1].id + 1;
+        const payload = action.payload.map((item) => {
+          const additionId = binarySearch<T>(item.id, state as T[]);
+
+          if (additionId && additionId.object === null) {
+            return item;
+          }
+
+          maxId += 1;
+          return { ...item, id: maxId };
+        });
+
+        return mergeSortedArrays(
+          state as T[],
+          payload.sort((a: T, b: T) => a.id - b.id),
+        );
       },
 
       updateItem(state: Draft<T[]>, action: PayloadAction<T>): T[] {
