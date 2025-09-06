@@ -5,9 +5,16 @@ export interface IndexedObject {
   id: number;
 }
 
+export interface IGlobalRaceCarStats extends IndexedObject {
+  hasFinished: boolean;
+  time: number;
+}
+
 export interface IRaceState {
   isGlobalRace: boolean;
   ongoing: boolean;
+  racingCarId: number;
+  resetAnimations: boolean;
 }
 
 export interface IStatePersistance {
