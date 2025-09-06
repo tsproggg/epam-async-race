@@ -10,7 +10,7 @@ const initialState: IRaceState = {
 };
 
 const RaceStateSlice = createSlice({
-  name: "RaceStatsSlice",
+  name: "RaceStateSlice",
   initialState,
   reducers: {
     setIsOngoing(

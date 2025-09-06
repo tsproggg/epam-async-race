@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   winners: WinnersSlice.reducer,
 
   carPropsInputBufferSlice: CarPropsInputBufferSlice.reducer,
-  raceStatsSlice: RaceStateSlice.reducer,
+  raceStateSlice: RaceStateSlice.reducer,
   statePersistenceSlice: StatePersistenceSlice.reducer,
 
   notificationSlice: NotificationSlice.reducer,

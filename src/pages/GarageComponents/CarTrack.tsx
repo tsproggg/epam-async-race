@@ -31,10 +31,10 @@ export default function CarTrack(props: ICar): React.ReactNode {
     (state: RootState) => state.carPropsInputBufferSlice.id,
   );
   const isRaceOngoing: boolean = useSelector(
-    (state: RootState) => state.raceStatsSlice.ongoing,
+    (state: RootState) => state.raceStateSlice.ongoing,
   );
   const isGlobalRace: boolean = useSelector(
-    (state: RootState) => state.raceStatsSlice.isGlobalRace,
+    (state: RootState) => state.raceStateSlice.isGlobalRace,
   );
 
   const dispatch = useDispatch();
