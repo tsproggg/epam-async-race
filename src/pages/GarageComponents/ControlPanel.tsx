@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ColorPicker from "../../components/ColorPicker";
 import GarageService from "../../services/GarageService";
 import { setName } from "../../store/CarPropsInputBufferSlice";
+import { setIsOngoing } from "../../store/RaceStateSlice";
 import { notify } from "../../utils/NotificationManager";
 
 import type { RootState } from "../../store/store";
@@ -16,9 +17,25 @@ export default function ControlPanel(): React.ReactNode {
   const carPropsName: string = useSelector(
     (state: RootState) => state.carPropsInputBufferSlice.name,
   );
+
+  const isRaceOngoing: boolean = useSelector(
+    (state: RootState) => state.raceStateSlice.ongoing,
+  );
+  const isGlobalRace: boolean = useSelector(
+    (state: RootState) => state.raceStateSlice.isGlobalRace,
+  );
+
   const dispatch = useDispatch();
 
-  // TODO: Handle race states for car addition/update requests
+  const resetRaceHandler = () => {
+    if (!isGlobalRace) {
+      dispatch(setIsOngoing({ ongoing: false, isGlobalRace: false }));
+      return;
+    }
+
+    alert("placeholder");
+  };
+
   // TODO: GLOBAL: Add full error handling
   return (
     <section>
@@ -40,6 +57,7 @@ export default function ControlPanel(): React.ReactNode {
           />
           <ColorPicker />
           <button
+            disabled={isRaceOngoing}
             id="addCar"
             type="button"
             onClick={() => {
@@ -54,6 +72,7 @@ export default function ControlPanel(): React.ReactNode {
             <span>Add new car</span>
           </button>
           <button
+            disabled={isRaceOngoing}
             id="updateCar"
             type="button"
             onClick={() => {
@@ -74,6 +93,7 @@ export default function ControlPanel(): React.ReactNode {
         <h2 className="text-center text-2xl font-bold">Race track</h2>
         <div className="flex justify-center gap-10" id="raceButtons">
           <button
+            disabled={isRaceOngoing}
             id="raceStart"
             onClick={() => alert("placeholder")}
             type="button"
@@ -81,13 +101,15 @@ export default function ControlPanel(): React.ReactNode {
             <span>START RACE</span>
           </button>
           <button
+            disabled={!isRaceOngoing}
             id="raceReset"
-            onClick={() => alert("placeholder")}
+            onClick={resetRaceHandler}
             type="button"
           >
             <span>RESET</span>
           </button>
           <button
+            disabled={isRaceOngoing}
             id="generateCars"
             onClick={async () => GarageService.generateCars(100)}
             type="button"

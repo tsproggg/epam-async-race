@@ -18,7 +18,6 @@ export default function CarRace(): React.ReactNode {
   );
   const dispatch = useDispatch();
 
-  // TODO: Handle race states before car generation
   return (
     <section className="pl-20 pr-20">
       <div

@@ -20,6 +20,11 @@ button {
     color: #fff;
     background-color: #22c55e;
   }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
 #closePopup {

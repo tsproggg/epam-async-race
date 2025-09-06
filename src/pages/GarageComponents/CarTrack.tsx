@@ -119,7 +119,12 @@ export default function CarTrack(props: ICar): React.ReactNode {
     setIsSelected(selectedCarId === id);
   }, [selectedCarId, id]);
 
-  // TODO: Handle race states before sending deletion requests
+  useEffect(() => {
+    if (!isRaceOngoing) {
+      stopCarHandler();
+    }
+  }, [isRaceOngoing, stopCarHandler]);
+
   // TODO: Make animation starting instantly without /start request overhead or use an alternative UI sign
   return (
     <section
