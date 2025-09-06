@@ -1,8 +1,7 @@
 import React from "react";
 
-import { Link } from "react-router";
-
 import { Links } from "../Links";
+import NavLink from "./NavLink";
 
 export default function Header(): React.ReactNode {
   return (
@@ -11,12 +10,12 @@ export default function Header(): React.ReactNode {
         {window.location.pathname === Links.GARAGE ? "Garage" : "Winners"}
       </h1>
       <nav id="navbar">
-        <ul className="h-64 flex items-center text-xl gap-15 [&>li]:hover:underline">
+        <ul className="h-64 flex items-center text-xl gap-15">
           <li>
-            <Link to={Links.GARAGE}>Garage</Link>
+            <NavLink text="Garage" to={Links.GARAGE} />
           </li>
           <li>
-            <Link to={Links.WINNERS}>Winners</Link>
+            <NavLink text="Winners" to={Links.WINNERS} />
           </li>
         </ul>
       </nav>
