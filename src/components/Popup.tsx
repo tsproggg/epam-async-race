@@ -13,7 +13,7 @@ export default function Popup(props: PopupProps): React.ReactNode {
   const { openPopupComponent } = props;
 
   return (
-    <div id={"popup"}>
+    <div id="popup">
       <button
         id="openPopupComponent"
         onClick={() => setIsOpened(true)}

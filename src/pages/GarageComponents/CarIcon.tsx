@@ -22,7 +22,7 @@ export default function CarIcon(props: {
   return (
     <svg
       height={`${size}px`}
-      id={"car"}
+      id="car"
       viewBox="0 0 32 32"
       width={`${size}px`}
       xmlns="http://www.w3.org/2000/svg"

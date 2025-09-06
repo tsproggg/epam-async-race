@@ -123,27 +123,23 @@ export default function CarTrack(props: ICar): React.ReactNode {
   // TODO: Make animation starting instantly without /start request overhead or use an alternative UI sign
   return (
     <section
-      id={"carTrack"}
-      className={
-        "relative flex flex-start flex-1 flex-col sm:flex-row border border-black rounded-3xl px-15 py-5"
-      }
+      className="relative flex flex-start flex-1 flex-col sm:flex-row border border-black rounded-3xl px-15 py-5"
+      id="carTrack"
     >
-      <div className={"w-auto sm:w-160 text-center"} id="controls">
-        <h4 className={"mb-5"}>
+      <div className="w-auto sm:w-160 text-center" id="controls">
+        <h4 className="mb-5">
           {name}
           {isSelected ? " - Selected" : ""}
         </h4>
         <div
+          className="flex justify-center sm:justify-around flex-wrap gap-10 sm:gap-5"
           id="buttons"
-          className={
-            "flex justify-center sm:justify-around flex-wrap gap-10 sm:gap-5"
-          }
         >
           <button
             disabled={isRaceOngoing}
             id="select"
             onClick={selectCarHandler}
-            type={"button"}
+            type="button"
           >
             <span>SELECT</span>
           </button>
@@ -151,7 +147,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
             disabled={isRaceOngoing}
             id="delete"
             onClick={() => GarageService.deleteCar(id)}
-            type={"button"}
+            type="button"
           >
             <span>DELETE</span>
           </button>
@@ -159,7 +155,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
             disabled={isRaceOngoing}
             id="start"
             onClick={startCarHandler}
-            type={"button"}
+            type="button"
           >
             <span>START</span>
           </button>
@@ -167,13 +163,13 @@ export default function CarTrack(props: ICar): React.ReactNode {
             disabled={(isRaceOngoing && isGlobalRace) || !isRaceOngoing}
             id="stop"
             onClick={stopCarHandler}
-            type={"button"}
+            type="button"
           >
             <span>STOP</span>
           </button>
         </div>
       </div>
-      <div ref={trackRef} className={"flex-1 ml-5"} id="track">
+      <div ref={trackRef} className="flex-1 ml-5" id="track">
         <div ref={carRef}>
           <CarIcon color={color} />
         </div>

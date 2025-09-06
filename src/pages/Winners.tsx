@@ -12,11 +12,11 @@ export default function Winners(): React.ReactNode {
   }, []);
 
   return (
-    <div id="Winners">
+    <React.Fragment>
       <Header />
       <main>
         <WinnersTable />
       </main>
-    </div>
+    </React.Fragment>
   );
 }

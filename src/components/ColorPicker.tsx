@@ -16,16 +16,16 @@ export default function ColorPicker(): React.ReactNode {
 
   return (
     <Popup
-      popupName={"Color picker"}
+      popupName="Color picker"
       openPopupComponent={
         <div
           className="grow-1 w-30 h-30 rounded-2xl"
-          id={"coloredBox"}
+          id="coloredBox"
           style={{ backgroundColor: color }}
         />
       }
       popupChildren={
-        <div className={"flex justify-center gap-15"} id={"colorPicker"}>
+        <div className="flex justify-center gap-15" id="colorPicker">
           <HexColorPicker
             color={color}
             onChange={(newColor: string) => {
@@ -34,7 +34,7 @@ export default function ColorPicker(): React.ReactNode {
           />
           <div
             className="grow-1 w-30 rounded-2xl"
-            id={"coloredBox"}
+            id="coloredBox"
             style={{ backgroundColor: color }}
           />
         </div>

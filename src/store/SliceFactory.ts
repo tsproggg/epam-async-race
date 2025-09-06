@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import binarySearch from "../utils/binarySearch";
-import mergeSortedArrays from "../utils/mergeSortedArrays.ts";
+import mergeSortedArrays from "../utils/mergeSortedArrays";
 
 import type { Draft, PayloadAction } from "@reduxjs/toolkit";
 
