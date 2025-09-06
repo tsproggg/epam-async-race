@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import "../garageStyles.scss";
 import CarTrack from "./CarTrack";
 import { setGarageListPage } from "../../store/StatePersistenceSlice";
+import { CARS_PER_PAGE } from "../../types/GlobalConst";
 
 import type { RootState } from "../../store/store";
 import type { ICar } from "../../types/ApiTypes";
 
 export default function CarRace(): React.ReactNode {
-  const CARS_PER_PAGE = 7;
-
   const carsList: ICar[] = useSelector((state: RootState) => state.garage);
   const page = useSelector(
     (state: RootState) => state.statePersistenceSlice.garageListPage,

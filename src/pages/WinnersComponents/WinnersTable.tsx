@@ -7,14 +7,15 @@ import {
   setWinnersListPage,
   setWinnersSorting,
 } from "../../store/StatePersistenceSlice";
-import { WinnersSorting } from "../../types/GlobalConst";
+import {
+  WINNERS_PER_PAGE as ROWS_PER_PAGE,
+  WinnersSorting,
+} from "../../types/GlobalConst";
 
 import type { RootState } from "../../store/store";
 import type { ICar, IWinner } from "../../types/ApiTypes";
 
 export default function WinnersTable(): React.ReactNode {
-  const ROWS_PER_PAGE = 10;
-
   const page = useSelector(
     (state: RootState) => state.statePersistenceSlice.winnersListPage,
   );

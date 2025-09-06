@@ -1,3 +1,6 @@
+export const CARS_PER_PAGE = 7;
+export const WINNERS_PER_PAGE = 10;
+
 export const WinnersSorting = {
   TIME_ASC: "t-asc",
   TIME_DESC: "t-desc",
