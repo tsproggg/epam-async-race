@@ -1,39 +1,118 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import ColorPicker from "../../components/ColorPicker";
+import EngineService from "../../services/EngineService";
 import GarageService from "../../services/GarageService";
+import WinnersService from "../../services/WinnersService";
 import { setName } from "../../store/CarPropsInputBufferSlice";
-import { setIsOngoing } from "../../store/RaceStateSlice";
+import { resetAnimations, setIsOngoing } from "../../store/RaceStateSlice";
+import { CARS_PER_PAGE } from "../../types/GlobalConst";
+import calculateCarRaceTime from "../../utils/calculateCarRaceTime";
 import { notify } from "../../utils/NotificationManager";
 
 import type { RootState } from "../../store/store";
+import type { ICar } from "../../types/ApiTypes";
+import type { IGlobalRaceCarStats } from "../../types/Interfaces";
 
 export default function ControlPanel(): React.ReactNode {
-  const carsAmount: number = useSelector(
-    (state: RootState) => state.garage.length,
-  );
+  const abortController = useRef<AbortController | null>(null);
+
+  const carsList: ICar[] = useSelector((state: RootState) => state.garage);
   const carPropsName: string = useSelector(
     (state: RootState) => state.carPropsInputBufferSlice.name,
   );
+  const page: number = useSelector(
+    (state: RootState) => state.statePersistenceSlice.garageListPage,
+  );
 
-  const isRaceOngoing: boolean = useSelector(
-    (state: RootState) => state.raceStateSlice.ongoing,
-  );
-  const isGlobalRace: boolean = useSelector(
-    (state: RootState) => state.raceStateSlice.isGlobalRace,
-  );
+  const {
+    ongoing: isRaceOngoing,
+    isGlobalRace,
+    racingCarId,
+  } = useSelector((state: RootState) => state.raceStateSlice);
 
   const dispatch = useDispatch();
 
-  const resetRaceHandler = () => {
-    if (!isGlobalRace) {
-      dispatch(setIsOngoing({ ongoing: false, isGlobalRace: false }));
-      return;
+  const endRace = useCallback(() => {
+    carsList.forEach((car, index) => {
+      if (index >= page * CARS_PER_PAGE && index < (page + 1) * CARS_PER_PAGE) {
+        EngineService.stopEngine(car.id);
+      }
+    });
+
+    if (abortController.current) {
+      abortController.current.abort();
+      abortController.current = null;
     }
 
-    alert("placeholder");
+    dispatch(resetAnimations(true));
+    dispatch(setIsOngoing({ ongoing: false, isGlobalRace, racingCarId }));
+  }, [carsList, isGlobalRace, racingCarId, page, dispatch]);
+
+  const startRaceHandler = async () => {
+    dispatch(
+      setIsOngoing({ ongoing: true, isGlobalRace: true, racingCarId: -1 }),
+    );
+
+    abortController.current = new AbortController();
+
+    const racingCarPromises: Promise<IGlobalRaceCarStats>[] = carsList
+      .filter(
+        (_, index) =>
+          index >= page * CARS_PER_PAGE && index < (page + 1) * CARS_PER_PAGE,
+      )
+      .map(async (car) =>
+        EngineService.startEngine(
+          car.id,
+          // @ts-expect-error abortController is non-null
+          abortController.current.signal,
+        ).then(async () => {
+          const raceStats = await calculateCarRaceTime(
+            car.id,
+
+            // @ts-expect-error abortController is non-null
+            abortController.current.signal,
+          );
+
+          if (!raceStats.hasFinished) {
+            await Promise.reject(new Error("Car broke down"));
+          }
+          return raceStats;
+        }),
+      );
+
+    try {
+      const results: PromiseSettledResult<IGlobalRaceCarStats>[] =
+        await Promise.allSettled(racingCarPromises);
+
+      let winner: IGlobalRaceCarStats | null = null;
+      results.forEach((res) => {
+        if (res.status === "fulfilled") {
+          if (winner === null || winner.time > res.value.time) {
+            winner = res.value;
+          }
+        }
+      });
+
+      if (winner) {
+        await WinnersService.addWin(winner.id, winner.time);
+
+        const wCar: ICar | undefined = carsList.find((c) => c.id === winner.id);
+        notify(
+          `The ${wCar?.name ?? "unknown car"} won the race in ${(winner.time / 1000).toFixed(3)} seconds!`,
+        );
+      } else {
+        notify(
+          "The race was either aborted, or no car finished successfully :(",
+        );
+      }
+    } catch (e) {
+      notify("No car finished successfully :(");
+    } finally {
+      endRace();
+    }
   };
 
   // TODO: GLOBAL: Add full error handling
@@ -87,7 +166,7 @@ export default function ControlPanel(): React.ReactNode {
             <span>Update selected car</span>
           </button>
         </div>
-        <h3 className="text-xl">Cars total: {carsAmount}</h3>
+        <h3 className="text-xl">Cars total: {carsList.length}</h3>
       </div>
       <div className="flex flex-wrap justify-around mb-15" id="race-controls">
         <h2 className="text-center text-2xl font-bold">Race track</h2>
@@ -95,18 +174,28 @@ export default function ControlPanel(): React.ReactNode {
           <button
             disabled={isRaceOngoing}
             id="raceStart"
-            onClick={() => alert("placeholder")}
+            onClick={startRaceHandler}
             type="button"
           >
-            <span>START RACE</span>
+            <span>
+              {isRaceOngoing && isGlobalRace
+                ? "Cars are racing..."
+                : `START RACE`}
+            </span>
           </button>
           <button
             disabled={!isRaceOngoing}
             id="raceReset"
-            onClick={resetRaceHandler}
             type="button"
+            onClick={() => {
+              if (isGlobalRace) {
+                notify("Global race was aborted");
+              }
+
+              endRace();
+            }}
           >
-            <span>RESET</span>
+            <span>{isRaceOngoing ? "STOP RACE" : "RESET"}</span>
           </button>
           <button
             disabled={isRaceOngoing}
