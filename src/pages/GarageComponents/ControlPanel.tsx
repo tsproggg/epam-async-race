@@ -97,10 +97,13 @@ export default function ControlPanel(): React.ReactNode {
       });
 
       if (winner) {
+        // @ts-expect-error winner is not never
         await WinnersService.addWin(winner.id, winner.time);
 
+        // @ts-expect-error winner is not null
         const wCar: ICar | undefined = carsList.find((c) => c.id === winner.id);
         notify(
+          // @ts-expect-error winner is not never
           `The ${wCar?.name ?? "unknown car"} won the race in ${(winner.time / 1000).toFixed(3)} seconds!`,
         );
       } else {
