@@ -23,7 +23,7 @@ Netlify: https://async-race-valerii-sofian.netlify.app/
 
 The full list of dependencies and dev dependencies is available at `package.json`
 
-## Checklist - 325/400 pts
+## Checklist - 400/400 pts
 
 ## 🚀 UI Deployment
 
@@ -76,11 +76,11 @@ The full list of dependencies and dev dependencies is available at `package.json
 - [x] **Start Engine Animation (20 points):** User clicks to the engine start button near each car -> UI is waiting for car's velocity answer -> animate the car and makes another request to drive. In case api returned 500 error car animation should be stopped.
 - [x] **Stop Engine Animation (20 points):** User clicks to the engine stop button near each car -> UI is waiting for answer for stopping engine -> car returned to it's initial place.
 - [x] **Responsive Animation (30 points):** Ensure car animations are fluid and responsive on screens as small as 500px.
-- [ ] **Start Race Button (10 points):** Start button should start the race for all cars on the current page.
-- [ ] **Reset Race Button (15 points):** Reset button should return all cars to their starting positions.
+- [x] **Start Race Button (10 points):** Start button should start the race for all cars on the current page.
+- [x] **Reset Race Button (15 points):** Reset button should return all cars to their starting positions.
 - [x] **Winner Announcement (5 points):** After some car finishes first user should see the message contains car's name that shows which one has won.
 - [x] **Button States (20 points):** Start engine button should be disabled in case car is already in driving mode. As well as stop engine button should be disabled when car is on it's initial place.
-- [ ] **Actions during the race (50 points):** Control over actions during a running race. Such as, deleting or editing a car, changing a page or view. Adding new cars. You can block buttons and stop the race. The main thing is to ensure predictable operation of the application.
+- [x] **Actions during the race (50 points):** Control over actions during a running race. Such as, deleting or editing a car, changing a page or view. Adding new cars. You can block buttons and stop the race. The main thing is to ensure predictable operation of the application.
 
 ## 🎨 Prettier and ESLint Configuration (10 points)
 
