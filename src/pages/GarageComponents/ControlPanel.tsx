@@ -7,7 +7,11 @@ import EngineService from "../../services/EngineService";
 import GarageService from "../../services/GarageService";
 import WinnersService from "../../services/WinnersService";
 import { setName } from "../../store/CarPropsInputBufferSlice";
-import { resetAnimations, setIsOngoing } from "../../store/RaceStateSlice";
+import {
+  pauseAnimations,
+  resetAnimations,
+  setIsOngoing,
+} from "../../store/RaceStateSlice";
 import { CARS_PER_PAGE } from "../../types/GlobalConst";
 import calculateCarRaceTime from "../../utils/calculateCarRaceTime";
 import { notify } from "../../utils/NotificationManager";
@@ -47,7 +51,7 @@ export default function ControlPanel(): React.ReactNode {
       abortController.current = null;
     }
 
-    dispatch(resetAnimations(true));
+    dispatch(pauseAnimations(true));
     dispatch(setIsOngoing({ ongoing: false, isGlobalRace, racingCarId }));
   }, [carsList, isGlobalRace, racingCarId, page, dispatch]);
 
@@ -55,33 +59,40 @@ export default function ControlPanel(): React.ReactNode {
     dispatch(
       setIsOngoing({ ongoing: true, isGlobalRace: true, racingCarId: -1 }),
     );
+    dispatch(resetAnimations(true));
 
     abortController.current = new AbortController();
 
-    const racingCarPromises: Promise<IGlobalRaceCarStats>[] = carsList
-      .filter(
-        (_, index) =>
-          index >= page * CARS_PER_PAGE && index < (page + 1) * CARS_PER_PAGE,
-      )
-      .map(async (car) =>
-        EngineService.startEngine(
+    const carsToRace = carsList.filter(
+      (_, index) =>
+        index >= page * CARS_PER_PAGE && index < (page + 1) * CARS_PER_PAGE,
+    );
+
+    await Promise.all(
+      carsToRace.map(async (car) => {
+        await EngineService.startEngine(
           car.id,
           // @ts-expect-error abortController is non-null
           abortController.current.signal,
-        ).then(async () => {
-          const raceStats = await calculateCarRaceTime(
-            car.id,
+        );
+      }),
+    );
 
-            // @ts-expect-error abortController is non-null
-            abortController.current.signal,
-          );
+    const racingCarPromises: Promise<IGlobalRaceCarStats>[] = carsToRace.map(
+      async (car) => {
+        const raceStats = await calculateCarRaceTime(
+          car.id,
 
-          if (!raceStats.hasFinished) {
-            await Promise.reject(new Error("Car broke down"));
-          }
-          return raceStats;
-        }),
-      );
+          // @ts-expect-error abortController is non-null
+          abortController.current.signal,
+        );
+
+        if (!raceStats.hasFinished) {
+          await Promise.reject(new Error("Car broke down"));
+        }
+        return raceStats;
+      },
+    );
 
     try {
       const results: PromiseSettledResult<IGlobalRaceCarStats>[] =
@@ -187,10 +198,14 @@ export default function ControlPanel(): React.ReactNode {
             </span>
           </button>
           <button
-            disabled={!isRaceOngoing}
             id="raceReset"
             type="button"
             onClick={() => {
+              if (!isRaceOngoing) {
+                dispatch(resetAnimations(true));
+                return;
+              }
+
               if (isGlobalRace) {
                 notify("Global race was aborted");
               }
@@ -198,7 +213,7 @@ export default function ControlPanel(): React.ReactNode {
               endRace();
             }}
           >
-            <span>{isRaceOngoing ? "STOP RACE" : "RESET"}</span>
+            <span>{isRaceOngoing ? "ABORT RACE" : "RESET"}</span>
           </button>
           <button
             disabled={isRaceOngoing}
