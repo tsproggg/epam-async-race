@@ -4,7 +4,7 @@ import type { IndexedObject } from "../types/Interfaces";
  * Returns:
  * **null** - empty array,
  * id only - requested id doesn't exist, it's the index where the id can be inserted,
- * id and object- found object
+ * id and object - found object
  */
 export default function binarySearch<T extends IndexedObject>(
   id: number,

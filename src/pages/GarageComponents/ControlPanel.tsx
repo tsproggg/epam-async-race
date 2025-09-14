@@ -118,7 +118,6 @@ export default function ControlPanel(): React.ReactNode {
     }
   };
 
-  // TODO: GLOBAL: Add full error handling
   return (
     <section>
       <div
