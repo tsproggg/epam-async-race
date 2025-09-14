@@ -86,4 +86,23 @@ export default class EngineService {
 
     return false;
   }
+
+  static async startAllEngines(
+    carIds: number[],
+    abortSignal: AbortSignal,
+  ): Promise<void> {
+    await Promise.all(
+      carIds.map(async (id) => {
+        await EngineService.startEngine(id, abortSignal);
+      }),
+    );
+  }
+
+  static async stopAllEngines(carIds: number[]): Promise<void> {
+    await Promise.all(
+      carIds.map(async (id) => {
+        EngineService.stopEngine(id);
+      }),
+    );
+  }
 }

@@ -35,12 +35,36 @@ export default function ControlPanel(): React.ReactNode {
 
   const dispatch = useDispatch();
 
-  const endRace = useCallback(() => {
-    carsList.forEach((car, index) => {
-      if (index >= page * CARS_PER_PAGE && index < (page + 1) * CARS_PER_PAGE) {
-        EngineService.stopEngine(car.id);
-      }
-    });
+  const driveAllCars = async (
+    carIds: number[],
+    abortSignal: AbortSignal,
+  ): Promise<IGlobalRaceCarStats | null> => {
+    let winner: IGlobalRaceCarStats | null = null;
+    await Promise.all(
+      carIds.map(async (id) => {
+        const raceStats = await calculateCarRaceTime(id, abortSignal);
+
+        if (!winner && raceStats.hasFinished) {
+          winner = raceStats;
+        } else if (
+          winner &&
+          raceStats.hasFinished &&
+          raceStats.time < winner.time
+        ) {
+          winner = raceStats;
+        }
+      }),
+    );
+
+    return winner;
+  };
+
+  const endRace = useCallback(async () => {
+    await EngineService.stopAllEngines(
+      carsList
+        .slice(page * CARS_PER_PAGE, (page + 1) * CARS_PER_PAGE)
+        .map((car: ICar) => car.id),
+    );
 
     if (abortController.current) {
       abortController.current.abort();
@@ -57,44 +81,23 @@ export default function ControlPanel(): React.ReactNode {
     );
 
     abortController.current = new AbortController();
-
-    const racingCarPromises: Promise<IGlobalRaceCarStats>[] = carsList
+    const racingCars: number[] = carsList
       .filter(
         (_, index) =>
           index >= page * CARS_PER_PAGE && index < (page + 1) * CARS_PER_PAGE,
       )
-      .map(async (car) =>
-        EngineService.startEngine(
-          car.id,
-          // @ts-expect-error abortController is non-null
-          abortController.current.signal,
-        ).then(async () => {
-          const raceStats = await calculateCarRaceTime(
-            car.id,
+      .map((car: ICar) => car.id);
 
-            // @ts-expect-error abortController is non-null
-            abortController.current.signal,
-          );
-
-          if (!raceStats.hasFinished) {
-            await Promise.reject(new Error("Car broke down"));
-          }
-          return raceStats;
-        }),
-      );
+    await EngineService.startAllEngines(
+      racingCars,
+      abortController.current.signal,
+    );
 
     try {
-      const results: PromiseSettledResult<IGlobalRaceCarStats>[] =
-        await Promise.allSettled(racingCarPromises);
-
-      let winner: IGlobalRaceCarStats | null = null;
-      results.forEach((res) => {
-        if (res.status === "fulfilled") {
-          if (winner === null || winner.time > res.value.time) {
-            winner = res.value;
-          }
-        }
-      });
+      const winner: IGlobalRaceCarStats | null = await driveAllCars(
+        racingCars,
+        abortController.current.signal,
+      );
 
       if (winner) {
         await WinnersService.addWin(winner.id, winner.time);
@@ -111,7 +114,7 @@ export default function ControlPanel(): React.ReactNode {
     } catch (e) {
       notify("No car finished successfully :(");
     } finally {
-      endRace();
+      await endRace();
     }
   };
 
@@ -187,12 +190,12 @@ export default function ControlPanel(): React.ReactNode {
             disabled={!isRaceOngoing}
             id="raceReset"
             type="button"
-            onClick={() => {
+            onClick={async () => {
               if (isGlobalRace) {
                 notify("Global race was aborted");
               }
 
-              endRace();
+              await endRace();
             }}
           >
             <span>{isRaceOngoing ? "STOP RACE" : "RESET"}</span>
