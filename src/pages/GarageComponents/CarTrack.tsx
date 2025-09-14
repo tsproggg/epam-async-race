@@ -65,7 +65,9 @@ export default function CarTrack(props: ICar): React.ReactNode {
       abortControllerRef.current = null;
     }
 
-    EngineService.stopEngine(id);
+    if (!isGlobalRace) {
+      EngineService.stopEngine(id);
+    }
 
     if (!isGlobalRace) {
       dispatch(
@@ -115,11 +117,7 @@ export default function CarTrack(props: ICar): React.ReactNode {
         notify("Sorry, the car broke down :(");
       }
     } finally {
-      if (!isGlobalRace) {
-        EngineService.stopEngine(id);
-      }
       abortControllerRef.current = null;
-
       stopCarHandler();
     }
   }, [id, isGlobalRace, racingCarId, stopCarHandler]);
