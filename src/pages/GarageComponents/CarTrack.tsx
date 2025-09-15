@@ -106,9 +106,7 @@ const CarTrack = forwardRef((props: ICar, parentRef): React.ReactNode => {
         animationControllerRef.current.createAnimation(animDuration);
       }
 
-      if (!isGlobalRace) {
-        animationControllerRef.current.playAnimation();
-      }
+      animationControllerRef.current.playAnimation();
 
       const { hasFinished: success, time: raceTime } =
         await calculateCarRaceTime(id, abortControllerRef.current.signal);
@@ -123,9 +121,7 @@ const CarTrack = forwardRef((props: ICar, parentRef): React.ReactNode => {
         );
       }
     } catch (e) {
-      if (!isGlobalRace) {
-        animationControllerRef.current?.pauseAnimation();
-      }
+      animationControllerRef.current?.pauseAnimation();
 
       if (e instanceof Error && e.name === "AbortError" && !isGlobalRace) {
         notify("Race was stopped");
