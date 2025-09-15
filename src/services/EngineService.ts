@@ -90,12 +90,15 @@ export default class EngineService {
   static async startAllEngines(
     carIds: number[],
     abortSignal: AbortSignal,
-  ): Promise<void> {
+  ): Promise<Record<number, number>> {
+    const animTimes: Record<number, number> = {};
     await Promise.all(
       carIds.map(async (id) => {
-        await EngineService.startEngine(id, abortSignal);
+        animTimes[id] = await EngineService.startEngine(id, abortSignal);
       }),
     );
+
+    return animTimes;
   }
 
   static async stopAllEngines(carIds: number[]): Promise<void> {

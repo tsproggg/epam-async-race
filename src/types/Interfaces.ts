@@ -14,7 +14,6 @@ export interface IRaceState {
   isGlobalRace: boolean;
   ongoing: boolean;
   racingCarId: number;
-  resetAnimations: boolean;
 }
 
 export interface IStatePersistance {

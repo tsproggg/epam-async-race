@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,20 +17,21 @@ import {
   setName,
   setSelectedCarId,
 } from "../../store/CarPropsInputBufferSlice";
-import { resetAnimations, setIsOngoing } from "../../store/RaceStateSlice";
-import "../garageStyles.scss";
-import createCarAnimation from "./createCarAnimation";
+import { setIsOngoing } from "../../store/RaceStateSlice";
+import AnimationController from "../../utils/AnimationController";
 import calculateCarRaceTime from "../../utils/calculateCarRaceTime";
 import { notify } from "../../utils/NotificationManager";
+import "../garageStyles.scss";
 
 import type { RootState } from "../../store/store";
 import type { ICar } from "../../types/ApiTypes";
 
-export default function CarTrack(props: ICar): React.ReactNode {
+const CarTrack = forwardRef((props: ICar, parentRef): React.ReactNode => {
+  const animationControllerRef = useRef<AnimationController>(null);
+
   const carRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const carAnimationRef = useRef<Animation | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -36,7 +44,6 @@ export default function CarTrack(props: ICar): React.ReactNode {
     ongoing: isRaceOngoing,
     isGlobalRace,
     racingCarId,
-    resetAnimations: isResetAnimations,
   } = useSelector((state: RootState) => state.raceStateSlice);
 
   const dispatch = useDispatch();
@@ -53,7 +60,8 @@ export default function CarTrack(props: ICar): React.ReactNode {
     if (!isGlobalRace && racingCarId !== id) return;
 
     if (!isGlobalRace) {
-      dispatch(resetAnimations(true));
+      animationControllerRef.current?.resetAnimation();
+      animationControllerRef.current = null;
     }
 
     if (carRef.current) {
@@ -77,7 +85,8 @@ export default function CarTrack(props: ICar): React.ReactNode {
   }, [id, isGlobalRace, racingCarId, dispatch]);
 
   const startCarHandler = useCallback(async (): Promise<void> => {
-    if (!isGlobalRace && racingCarId !== id) return;
+    if (isGlobalRace) return;
+    if (racingCarId !== id) return;
     if (!carRef.current || !trackRef.current) return;
 
     abortControllerRef.current = new AbortController();
@@ -87,20 +96,25 @@ export default function CarTrack(props: ICar): React.ReactNode {
         abortControllerRef.current.signal,
       );
 
-      carAnimationRef.current = createCarAnimation(
-        carRef.current,
-        trackRef.current,
-        animDuration,
-      );
-      carAnimationRef.current?.play();
+      if (!animationControllerRef.current) {
+        animationControllerRef.current = new AnimationController(
+          carRef.current,
+          trackRef.current,
+          animDuration,
+        );
+      } else {
+        animationControllerRef.current.createAnimation(animDuration);
+      }
 
-      if (isGlobalRace) return;
+      if (!isGlobalRace) {
+        animationControllerRef.current.playAnimation();
+      }
 
       const { hasFinished: success, time: raceTime } =
         await calculateCarRaceTime(id, abortControllerRef.current.signal);
 
       if (!success) {
-        carAnimationRef.current?.pause();
+        animationControllerRef.current.pauseAnimation();
 
         notify("Sorry, the car broke down :(");
       } else {
@@ -109,7 +123,9 @@ export default function CarTrack(props: ICar): React.ReactNode {
         );
       }
     } catch (e) {
-      carAnimationRef.current?.pause();
+      if (!isGlobalRace) {
+        animationControllerRef.current?.pauseAnimation();
+      }
 
       if (e instanceof Error && e.name === "AbortError" && !isGlobalRace) {
         notify("Race was stopped");
@@ -123,26 +139,31 @@ export default function CarTrack(props: ICar): React.ReactNode {
   }, [id, isGlobalRace, racingCarId, stopCarHandler]);
 
   useEffect(() => {
+    animationControllerRef.current = new AnimationController(
+      carRef.current,
+      trackRef.current,
+      0,
+    );
+  }, []);
+
+  useEffect(() => {
     setIsSelected(selectedCarId === id);
   }, [selectedCarId, id]);
 
   useEffect(() => {
     if (isRaceOngoing) {
-      startCarHandler();
+      startCarHandler().then(() => {});
     } else {
       stopCarHandler();
     }
   }, [isRaceOngoing, isGlobalRace, startCarHandler, stopCarHandler]);
 
-  useEffect(() => {
-    if (isResetAnimations) {
-      carAnimationRef.current?.cancel();
-      carAnimationRef.current = null;
-      dispatch(resetAnimations(false));
-    }
-  }, [isResetAnimations, dispatch]);
+  useImperativeHandle(
+    parentRef,
+    () => new AnimationController(carRef.current, trackRef.current, 0),
+    [],
+  );
 
-  // TODO: Make animation starting instantly without /start request overhead or use an alternative UI sign
   return (
     <section
       className="relative flex flex-start flex-1 flex-col sm:flex-row border border-black rounded-3xl px-15 py-5"
@@ -218,4 +239,6 @@ export default function CarTrack(props: ICar): React.ReactNode {
       </div>
     </section>
   );
-}
+});
+
+export default CarTrack;
