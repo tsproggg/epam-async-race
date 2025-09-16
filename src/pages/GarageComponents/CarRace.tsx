@@ -136,6 +136,11 @@ export default function CarRace(): React.ReactNode {
       await endRace();
     }
   };
+
+  useEffect(() => {
+    trackAnimRefs.current = {};
+  }, [page]);
+
   return (
     <section className="pl-20 pr-20">
       <div className="flex flex-wrap justify-around mb-15" id="race-controls">
