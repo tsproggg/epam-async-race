@@ -55,3 +55,18 @@
     right: 100px;
   }
 }
+
+.lightCarIconColor::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+
+  width: 90px;
+  height: 90px;
+
+  background: #ffa2a2;
+  border-radius: 50%;
+  filter: blur(5px);
+  z-index: -1;
+}
