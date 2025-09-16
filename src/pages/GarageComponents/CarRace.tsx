@@ -37,7 +37,9 @@ export default function CarRace(): React.ReactNode {
 
   const resetAnimations = (): void => {
     Object.values(trackAnimRefs.current).forEach((anim) => {
-      anim.resetAnimation();
+      if (anim) {
+        anim.resetAnimation();
+      }
     });
   };
 
