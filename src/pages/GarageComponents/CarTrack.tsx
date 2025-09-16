@@ -154,11 +154,7 @@ const CarTrack = forwardRef((props: ICar, parentRef): React.ReactNode => {
     }
   }, [isRaceOngoing, isGlobalRace, startCarHandler, stopCarHandler]);
 
-  useImperativeHandle(
-    parentRef,
-    () => new AnimationController(carRef.current, trackRef.current, 0),
-    [],
-  );
+  useImperativeHandle(parentRef, () => animationControllerRef.current, []);
 
   return (
     <section

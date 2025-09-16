@@ -159,10 +159,14 @@ export default function CarRace(): React.ReactNode {
             </span>
           </button>
           <button
-            disabled={!isRaceOngoing}
             id="raceReset"
             type="button"
             onClick={async () => {
+              if (!isRaceOngoing) {
+                resetAnimations();
+                return;
+              }
+
               if (isGlobalRace) {
                 notify("Global race was aborted");
               }
