@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -34,6 +34,12 @@ export default function CarRace(): React.ReactNode {
   } = useSelector((state: RootState) => state.raceStateSlice);
 
   const dispatch = useDispatch();
+
+  const resetAnimations = (): void => {
+    Object.values(trackAnimRefs.current).forEach((anim) => {
+      anim.resetAnimation();
+    });
+  };
 
   const driveAllCars = async (
     carIds: number[],
@@ -73,7 +79,6 @@ export default function CarRace(): React.ReactNode {
 
     Object.values(trackAnimRefs.current).forEach((anim) => {
       anim.pauseAnimation();
-      anim.resetAnimation(); // TODO: remove reset, make it using a button
     });
 
     dispatch(setIsOngoing({ ongoing: false, isGlobalRace, racingCarId }));
@@ -85,6 +90,8 @@ export default function CarRace(): React.ReactNode {
     );
 
     abortController.current = new AbortController();
+    resetAnimations();
+
     const racingCars: number[] = carsList
       .filter(
         (_, index) =>
@@ -205,9 +212,9 @@ export default function CarRace(): React.ReactNode {
           <button
             id="prevPage"
             type="button"
-            onClick={() =>
-              dispatch(setGarageListPage(page - 1 < 0 ? 0 : page - 1))
-            }
+            onClick={() => {
+              dispatch(setGarageListPage(page - 1 < 0 ? 0 : page - 1));
+            }}
           >
             <span>{"<="} PREVIOUS PAGE</span>
           </button>
@@ -221,15 +228,15 @@ export default function CarRace(): React.ReactNode {
           <button
             id="nextPage"
             type="button"
-            onClick={() =>
+            onClick={() => {
               dispatch(
                 setGarageListPage(
                   page + 1 <= Math.ceil(carsList.length / CARS_PER_PAGE) - 1
                     ? page + 1
                     : Math.ceil(carsList.length / CARS_PER_PAGE) - 1,
                 ),
-              )
-            }
+              );
+            }}
           >
             <span>NEXT PAGE {"=>"}</span>
           </button>

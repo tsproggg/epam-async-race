@@ -1,9 +1,9 @@
 export default class AnimationController {
-  animation: Animation | null = null;
+  #animation: Animation | null = null;
 
-  carRef: HTMLDivElement | null = null;
+  readonly #carRef: HTMLDivElement | null = null;
 
-  trackRef: HTMLDivElement | null = null;
+  readonly #trackRef: HTMLDivElement | null = null;
 
   constructor(
     car: HTMLDivElement | null,
@@ -12,8 +12,8 @@ export default class AnimationController {
   ) {
     if (!car || !track) return;
 
-    this.carRef = car;
-    this.trackRef = track;
+    this.#carRef = car;
+    this.#trackRef = track;
 
     if (animDuration > 0) {
       this.#createAnimation(car, track, animDuration);
@@ -21,9 +21,9 @@ export default class AnimationController {
   }
 
   createAnimation(duration: number): void {
-    if (!this.carRef || !this.trackRef) throw new Error("No refs found");
+    if (!this.#carRef || !this.#trackRef) throw new Error("No refs found");
 
-    this.#createAnimation(this.carRef, this.trackRef, duration);
+    this.#createAnimation(this.#carRef, this.#trackRef, duration);
   }
 
   #createAnimation(
@@ -38,7 +38,7 @@ export default class AnimationController {
     // eslint-disable-next-line no-param-reassign
     car.style.position = "absolute";
 
-    this.animation = car.animate(
+    this.#animation = car.animate(
       [
         {
           left: 0,
@@ -55,19 +55,19 @@ export default class AnimationController {
       },
     );
 
-    this.animation.pause();
+    this.#animation.pause();
   }
 
   playAnimation(): void {
-    this.animation?.play();
+    this.#animation?.play();
   }
 
   pauseAnimation(): void {
-    this.animation?.pause();
+    this.#animation?.pause();
   }
 
   resetAnimation(): void {
-    this.animation?.cancel();
-    this.animation = null;
+    this.#animation?.cancel();
+    this.#animation = null;
   }
 }
