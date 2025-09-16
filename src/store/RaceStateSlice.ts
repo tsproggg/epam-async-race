@@ -8,8 +8,6 @@ const initialState: IRaceState = {
   isGlobalRace: false,
   ongoing: false,
   racingCarId: -1,
-  resetAnimations: false,
-  pauseAnimations: false,
 };
 
 const RaceStateSlice = createSlice({
@@ -26,15 +24,8 @@ const RaceStateSlice = createSlice({
     ) {
       return { ...state, ...action.payload };
     },
-    pauseAnimations(state: IRaceState, action: PayloadAction<boolean>) {
-      return { ...state, pauseAnimations: action.payload };
-    },
-    resetAnimations(state: IRaceState, action: PayloadAction<boolean>) {
-      return { ...state, resetAnimations: action.payload };
-    },
   },
 });
 
 export default RaceStateSlice;
-export const { setIsOngoing, resetAnimations, pauseAnimations } =
-  RaceStateSlice.actions;
+export const { setIsOngoing } = RaceStateSlice.actions;

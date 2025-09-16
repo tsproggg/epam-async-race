@@ -12,6 +12,7 @@ export type WinnersSorting =
   (typeof WinnersSorting)[keyof typeof WinnersSorting];
 
 export const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+export const LIGHT_COLOR_GRAYSCALE_THRESHOLD = 225;
 
 export const hexColors = [
   "#FF5733",
