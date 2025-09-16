@@ -20,7 +20,6 @@ export default function sliceFactory<T extends IndexedObject>(
         return action.payload.sort((a: T, b: T) => a.id - b.id);
       },
 
-      // the method below is present only for CRUD cycle completeness since it's unused
       clearItems(_, __: PayloadAction) {
         return [];
       },

@@ -1,6 +1,7 @@
 #delete,
 #stop,
-#closePopup {
+#closePopup,
+#clearLeaderboard {
   border-color: #ef4444;
 
   &:is(:hover, :active) {

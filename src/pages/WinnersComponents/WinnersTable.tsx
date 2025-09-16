@@ -3,10 +3,12 @@ import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import WinnerRow from "./WinnerRow";
+import WinnersService from "../../services/WinnersService.ts";
 import {
   setWinnersListPage,
   setWinnersSorting,
 } from "../../store/StatePersistenceSlice";
+import { WinnersSlice } from "../../store/store";
 import {
   WINNERS_PER_PAGE as ROWS_PER_PAGE,
   WinnersSorting,
@@ -56,16 +58,26 @@ export default function WinnersTable(): React.ReactNode {
     });
   }, [sorting, winnersList, carsList]);
 
+  const clearLeaderboardHandler = () => {
+    winnersList.forEach((el) => {
+      WinnersService.removeWinner(el.id);
+      dispatch(WinnersSlice.actions.clearItems());
+    });
+  };
+
   return (
     <section
       className="w-8/10 mx-auto my-20 flex flex-col justify-center items-end"
       id="WinnersTable"
     >
-      <div className="sortDropdown">
+      <div
+        className="flex justify-between items-center mb-10 w-10/10 my-10"
+        id="toolbar"
+      >
         <label htmlFor="sortingOptions">
           Sort by:{" "}
           <select
-            className="border"
+            className="border rounded-2xl px-5"
             id="sortingOptions"
             name="sortingOptions"
             value={sorting}
@@ -83,6 +95,13 @@ export default function WinnersTable(): React.ReactNode {
             <option value={WinnersSorting.WINS_DESC}>Wins - descending</option>
           </select>
         </label>
+        <button
+          id="clearLeaderboard"
+          onClick={clearLeaderboardHandler}
+          type="button"
+        >
+          Clear leaderboard
+        </button>
       </div>
       <table className="mt-20 text-center w-10/10">
         <thead>
