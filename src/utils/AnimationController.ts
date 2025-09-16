@@ -69,9 +69,6 @@ export default class AnimationController {
   // Robust reset: cancel animation, clear transform, force inline left=0
   resetAnimation(): void {
     if (!this.#carRef) return;
-    if (!this.#animation) {
-      alert("Animation not found");
-    }
 
     this.#animation?.cancel();
     this.#carRef.style.left = "0px";
