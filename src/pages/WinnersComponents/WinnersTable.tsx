@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import WinnerRow from "./WinnerRow";
-import WinnersService from "../../services/WinnersService.ts";
+import WinnersService from "../../services/WinnersService";
 import {
   setWinnersListPage,
   setWinnersSorting,
